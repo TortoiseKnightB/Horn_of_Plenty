@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: multi_level_cache
+  profiles:
+    active: local
