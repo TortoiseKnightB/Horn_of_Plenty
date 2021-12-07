@@ -1,4 +1,0 @@
-[control + K] + [control + C]：注释
-[control + K] + [control + U]：取消注释
-ctrl + -：返回上一光标处
-ctrl + shift + -：返回下一光标处
