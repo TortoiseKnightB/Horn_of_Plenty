@@ -4,11 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc6b6e92-443e-4573-94c7-2d0f9f322f38" name="Default Changelist" comment="docs：新增 README.md">
-      <change afterPath="$PROJECT_DIR$/test_projects/leetcode/src/main/java/Solution.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+    <list default="true" id="fc6b6e92-443e-4573-94c7-2d0f9f322f38" name="Default Changelist" comment="ignore">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_projects/leetcode/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test_projects/leetcode/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_projects/leetcode/leetcode.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_projects/leetcode/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/leetcode/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_projects/leetcode/src/main/java/Solution.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_projects/leetcode/src/test/java/SolutionTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +46,7 @@
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/test_projects/leetcode" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/leetcode" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.14084506" />
@@ -59,15 +61,20 @@
     </key>
   </component>
   <component name="RunManager" selected="JUnit.SolutionTest">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+    <configuration name="Solution" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Solution" />
+      <module name="leetcode" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -113,14 +120,15 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="JUnit.SolutionTest" />
       <item itemvalue="Maven.leetcode" />
       <item itemvalue="Spring Boot.MultiLevelCacheApplication" />
-      <item itemvalue="JUnit.SolutionTest" />
+      <item itemvalue="Application.Solution" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.SolutionTest" />
-        <item itemvalue="Spring Boot.MultiLevelCacheApplication" />
+        <item itemvalue="Application.Solution" />
         <item itemvalue="Spring Boot.MultiLevelCacheApplication" />
         <item itemvalue="Spring Boot.MultiLevelCacheApplication" />
         <item itemvalue="Spring Boot.MultiLevelCacheApplication" />
@@ -147,6 +155,7 @@
       <workItem from="1638954221605" duration="520000" />
       <workItem from="1638956455404" duration="128000" />
       <workItem from="1638956595312" duration="416000" />
+      <workItem from="1638958423088" duration="276000" />
     </task>
     <option name="localTasksCounter" value="2" />
     <servers />
