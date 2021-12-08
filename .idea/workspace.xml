@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc6b6e92-443e-4573-94c7-2d0f9f322f38" name="Default Changelist" comment="docs：新增 README.md" />
+    <list default="true" id="fc6b6e92-443e-4573-94c7-2d0f9f322f38" name="Default Changelist" comment="docs：新增 README.md">
+      <change afterPath="$PROJECT_DIR$/test_projects/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,7 +18,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="multi_cache_dev" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -28,6 +33,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RunManager">
     <configuration name="MultiLevelCacheApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true">
@@ -39,6 +45,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Spring Boot.MultiLevelCacheApplication" />
+        <item itemvalue="Spring Boot.MultiLevelCacheApplication" />
         <item itemvalue="Spring Boot.MultiLevelCacheApplication" />
         <item itemvalue="Spring Boot.MultiLevelCacheApplication" />
       </list>
@@ -61,6 +69,7 @@
       <updated>1638953371461</updated>
       <workItem from="1638953380762" duration="62000" />
       <workItem from="1638953457478" duration="1000" />
+      <workItem from="1638954221605" duration="520000" />
     </task>
     <option name="localTasksCounter" value="2" />
     <servers />
