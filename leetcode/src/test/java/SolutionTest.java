@@ -9,6 +9,13 @@ public class SolutionTest {
     @Test
     public void main() {
         System.out.println("test start");
-        solution.hello();
+    }
+
+    @DisplayName("数组测试")
+    @Test
+    public void arrayTest(){
+        int[] input = new int[]{1,4,0};
+        int res = solution.maxProfit(input);
+        System.out.println(res);
     }
 }
