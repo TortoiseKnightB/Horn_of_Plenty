@@ -97,6 +97,49 @@ ln -s /var/lib/docker /root/local/
 
 ### MySQL
 
+##### 在 docker 上安装
+
+- 从 docker 安装 mysql
+- docker hub上面查找 mysql 镜像
+
+```bash
+docker search mysql
+```
+
+- 从docker hub上拉取tomcat镜像到本地
+
+```bash
+docker pull mysql
+```
+
+- 启动 mysql 容器
+
+```bash
+docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -d mysql
+
+-p 1234:3306：将主机的 1234 端口映射到 docker 容器的 3306 端口
+-e MYSQL_ROOT_PASSWORD=password：初始化 root 用户的密码
+-d mysql : 后台程序运行 mysql 
+```
+
+- 进入 mysql 容器
+
+```bash
+docker exec -it mysql（或MySQL运行成功后的容器ID） /bin/bash 
+```
+
+- 登录 mysql
+
+```bash
+mysql -u root -p
+```
+
+- 打开阿里云服务器防火墙 3306 端口，用客户端（如 MySQL Workbench）可以连接成功
+
+------
+
+##### 已废弃计划
+
 - 官网下载压缩包（Linux 5.7版本）（https://dev.mysql.com/downloads/mysql/）
 - 好像需要依赖 libaio 库，阿里云服务器自带，这里就略过
 
