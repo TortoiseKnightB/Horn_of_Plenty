@@ -17,6 +17,84 @@
 └── my_tar	# 存放压缩包
 ```
 
+### Docker
+
+- 官方安装文档：https://docs.docker.com/engine/install/centos/
+- 卸载旧版本
+
+```bash
+ sudo yum remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-engine
+```
+
+- 安装需要的软件包
+
+```bash
+sudo yum install -y yum-utils
+```
+
+- 设置镜像仓库（换成国内阿里云镜像源）
+
+```bash
+ sudo yum-config-manager \
+    --add-repo \
+    http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+```
+
+- 若出现问题 `Invalid configuration value: failovermethod=priority in /etc/yum.repos.d/CentOS-epel.repo; 配置：ID 为 "failovermethod" 的 OptionBinding 不存在`，大概的意思为配置值  failovermethod 无效，这里将它注释掉即可
+
+```bash
+vim /etc/yum.repos.d/CentOS-epel.repo
+
+[epel]
+name=Extra Packages for Enterprise Linux 8 - $basearch
+baseurl=http://mirrors.cloud.aliyuncs.com/epel/8/Everything/$basearch
+# failovermethod=priority
+enabled=1
+gpgcheck=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-8
+```
+
+- 更新 yum 软件包索引
+
+```bash
+yum makecache fast
+```
+
+- 安装 Docker CE（社区免费版）
+
+```bash
+sudo yum install docker-ce
+```
+
+- 启动 docker
+
+```bash
+systemctl start docker
+```
+
+- 测试
+
+```bash
+docker version
+
+docker run hello-world
+```
+
+- docker 默认安装路径为 `/var/lib/docker`，在我们自己的文件夹 `/root/local/` 下创建软链接
+
+```bash
+ln -s /var/lib/docker /root/local/
+```
+
+------
+
 ### MySQL
 
 - 官网下载压缩包（Linux 5.7版本）（https://dev.mysql.com/downloads/mysql/）
