@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    username: root
+    password: 123456Ben
+    url: jdbc:mysql://47.100.93.224:3306/test_db?serverTimezone=UTC&allowMultiQueries=true
+    driver-class-name: com.mysql.cj.jdbc.Driver

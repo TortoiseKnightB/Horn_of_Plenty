@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    active: local
+  application:
+    name: web-test
+
+mybatis:
+  config-location: classpath:/mybatis-config.xml
+  mapper-locations: classpath:/mapper/*.xml
