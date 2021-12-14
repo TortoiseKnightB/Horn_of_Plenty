@@ -1,4 +1,5 @@
 # TEST
 
 - 个人测试文件
-- 包括刷题测试，其他组件的测试
+- leetcode 刷题测试
+- spring boot 整合 mybatis 测试

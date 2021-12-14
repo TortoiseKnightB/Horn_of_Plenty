@@ -5,5 +5,5 @@ package com.knight.webcommon.service;
  */
 public interface TestService {
 
-    int startTestService(int a, int b);
+    String startTestService(String id);
 }

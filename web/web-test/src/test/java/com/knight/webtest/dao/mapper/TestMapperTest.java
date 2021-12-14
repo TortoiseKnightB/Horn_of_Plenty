@@ -3,6 +3,7 @@ package com.knight.webtest.dao.mapper;
 import com.knight.webcommon.model.entity.TestEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
 
