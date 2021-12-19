@@ -138,6 +138,12 @@ mysql -u root -p
 
 ------
 
+##### 文件结构
+
+- 配置文件路径 `/etc/mysql/my.cnf` 等（查找语句 ` mysql --help | grep my.cnf`）
+
+------
+
 ##### 已废弃计划
 
 - 官网下载压缩包（Linux 5.7版本）（https://dev.mysql.com/downloads/mysql/）
@@ -199,4 +205,4 @@ cd /usr/local/mysql/ ; \
 cd /usr/local/mysql/
 ln -s ./support-files/mysql.server ./bin/mysql.server
 ```
- o0uJrm5%UO>czSveXpg0Mp?e
+
