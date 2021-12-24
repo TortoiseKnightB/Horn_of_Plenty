@@ -1,13 +1,11 @@
 package com.knight.webtest.dao.mapper;
 
-import com.knight.webcommon.model.entity.TestEntity;
+import com.knight.webcommon.model.entity.TestEntityDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author TortoiseKnightB
@@ -22,7 +20,7 @@ class TestMapperTest {
     @Test
     void getTestEntity() {
         String testId = "2021cvi";
-        TestEntity testEntity = testMapper.getTestEntity(testId);
-        System.out.println(testEntity);
+        TestEntityDTO testEntityDTO = testMapper.getTestEntity(testId);
+        System.out.println(testEntityDTO);
     }
 }

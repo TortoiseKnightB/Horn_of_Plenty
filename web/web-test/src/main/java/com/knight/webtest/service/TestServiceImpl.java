@@ -1,6 +1,6 @@
 package com.knight.webtest.service;
 
-import com.knight.webcommon.model.entity.TestEntity;
+import com.knight.webcommon.model.entity.TestEntityDTO;
 import com.knight.webcommon.service.TestService;
 import com.knight.webtest.dao.mapper.TestMapper;
 import org.springframework.stereotype.Component;
@@ -18,8 +18,7 @@ public class TestServiceImpl implements TestService {
     private TestMapper testMapper;
 
     @Override
-    public String startTestService(String id) {
-        TestEntity testEntity = testMapper.getTestEntity(id);
-        return testEntity.toString();
+    public TestEntityDTO startTestService(String id) {
+        return testMapper.getTestEntity(id);
     }
 }

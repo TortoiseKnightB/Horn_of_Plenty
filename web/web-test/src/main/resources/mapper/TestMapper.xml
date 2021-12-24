@@ -3,9 +3,16 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.knight.webtest.dao.mapper.TestMapper">
-    <select id="getTestEntity" resultType="com.knight.webcommon.model.entity.TestEntity">
+
+    <resultMap id="TestResultMap" type="com.knight.webcommon.model.entity.TestEntityDTO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="test_id" jdbcType="VARCHAR" property="testId"/>
+        <result column="message" jdbcType="VARCHAR" property="message"/>
+    </resultMap>
+
+    <select id="getTestEntity" resultMap="TestResultMap">
         select *
         from test_entity
-        where test_id = #{testId}
+        where test_id = #{testId, jdbcType=VARCHAR}
     </select>
 </mapper>

@@ -1,6 +1,6 @@
 package com.knight.webtest.dao.mapper;
 
-import com.knight.webcommon.model.entity.TestEntity;
+import com.knight.webcommon.model.entity.TestEntityDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -18,5 +18,5 @@ public interface TestMapper {
      * @param testId 测试编号
      * @return 测试数据
      */
-    TestEntity getTestEntity(@Param("testId") String testId);
+    TestEntityDTO getTestEntity(@Param("testId") String testId);
 }

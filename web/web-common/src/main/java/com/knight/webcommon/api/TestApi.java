@@ -1,5 +1,8 @@
 package com.knight.webcommon.api;
 
+import com.knight.webcommon.model.entity.TestEntityDTO;
+import com.knight.webcommon.model.response.ResultInfo;
+
 /**
  * 测试Api，中台对外接口，通过rpc方式发布出去
  * <p>
@@ -10,6 +13,12 @@ package com.knight.webcommon.api;
  */
 public interface TestApi {
 
-    String startTestApi(String id);
+    /**
+     * api 测试接口
+     *
+     * @param id 数据库 test_id
+     * @return
+     */
+    ResultInfo<TestEntityDTO> startTestApi(String id);
 
 }

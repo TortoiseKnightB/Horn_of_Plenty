@@ -1,0 +1,10 @@
+网关模块是统一控制其他所有模块的，其他模块存在自已的一小部分，用来保存自己独有的数据，结构如下
+model
+|    \_request
+|     |_response
+|               \_dto
+|                |_vo
+|
+|_service(api)
+|
+|_util(Helper:对象构建类)

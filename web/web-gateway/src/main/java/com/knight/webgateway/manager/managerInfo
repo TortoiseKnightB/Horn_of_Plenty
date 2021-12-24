@@ -1,1 +1,4 @@
 一般通过 HTTP 方式来调用中台，也可以另外用 RPC 的方式
+web-common 中的 api 在子模块中发布后，被 gateway 引入，在 manager 中被引用
+manager 又被 ServiceImpl 调用
+manager 中返回的数据封装类为 DTO
