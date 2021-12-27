@@ -2,8 +2,10 @@ package com.knight.webgateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
+@ComponentScan(basePackages = {"com.knight"})
 public class WebGatewayApplication {
 
     public static void main(String[] args) {

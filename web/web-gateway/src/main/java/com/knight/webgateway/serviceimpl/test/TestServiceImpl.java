@@ -15,7 +15,7 @@ import javax.annotation.Resource;
  * @author TortoiseKnightB
  * @date 2021/12/24
  */
-@Service
+@Service(value = "TestService-gateway")
 public class TestServiceImpl implements TestService {
 
     @Resource

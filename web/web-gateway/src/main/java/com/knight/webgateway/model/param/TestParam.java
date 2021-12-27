@@ -1,7 +1,6 @@
 package com.knight.webgateway.model.param;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sun.istack.internal.NotNull;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

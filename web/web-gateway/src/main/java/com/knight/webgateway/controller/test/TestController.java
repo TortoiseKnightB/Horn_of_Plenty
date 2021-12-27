@@ -4,13 +4,9 @@ import com.knight.webgateway.model.param.TestParam;
 import com.knight.webgateway.model.response.ResultInfo;
 import com.knight.webgateway.model.response.vo.TestEntityVO;
 import com.knight.webgateway.service.test.TestService;
-import com.sun.istack.internal.NotNull;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -23,9 +19,26 @@ import javax.annotation.Resource;
 @RequestMapping(value = "/test")
 public class TestController {
 
-    @Resource
+    @Resource(name = "TestService-gateway")
     private TestService testService;
 
+
+    /**
+     * 测试样例：api/test
+     *
+     * @return 若成功启动，则返回成功信息
+     */
+    @GetMapping
+    public String test() {
+        return "test succeed";
+    }
+
+    /**
+     * 数据库测试样例：api/test/GetTestDataById
+     *
+     * @param param 数据库测试入参
+     * @return 数据库查询信息
+     */
     // @NotNull Param param
     @ApiOperation(value = "测试controller：根据test_id查询数据库信息")
     @PostMapping(value = "/GetTestDataById")

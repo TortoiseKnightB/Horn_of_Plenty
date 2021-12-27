@@ -23,6 +23,7 @@ public class TestManager {
     @Resource
     private TestApi testApi;
 
+
     /**
      * 测试 manager 接口，调用中台的测试 api 接口
      *
@@ -38,5 +39,7 @@ public class TestManager {
             // TODO 抛出调用结果返回失败异常
         }
         return resultInfo.getData();
+
+//        return null;
     }
 }

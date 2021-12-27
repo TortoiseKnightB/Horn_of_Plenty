@@ -11,7 +11,7 @@ import javax.annotation.Resource;
  * @author TortoiseKnightB
  * @date 2021/12/09
  */
-@Component
+@Component(value = "TestService-mid")
 public class TestServiceImpl implements TestService {
 
     @Resource

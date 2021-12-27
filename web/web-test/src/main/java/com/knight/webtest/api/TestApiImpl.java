@@ -6,8 +6,6 @@ import com.knight.webcommon.model.response.ResultInfo;
 import com.knight.webcommon.service.TestService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
@@ -17,7 +15,7 @@ import javax.annotation.Resource;
 @Component
 public class TestApiImpl implements TestApi {
 
-    @Resource
+    @Resource(name = "TestService-mid")
     private TestService testService;
 
     @GetMapping(value = "startTestApi")
