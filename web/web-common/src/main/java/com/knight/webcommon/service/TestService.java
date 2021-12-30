@@ -1,5 +1,6 @@
 package com.knight.webcommon.service;
 
+import com.knight.webcommon.model.entity.TestData;
 import com.knight.webcommon.model.entity.TestEntityDTO;
 
 /**
@@ -8,4 +9,6 @@ import com.knight.webcommon.model.entity.TestEntityDTO;
 public interface TestService {
 
     TestEntityDTO startTestService(String id);
+
+    int addTestData(TestData data);
 }

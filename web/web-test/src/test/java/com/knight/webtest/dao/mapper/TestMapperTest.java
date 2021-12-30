@@ -1,6 +1,8 @@
 package com.knight.webtest.dao.mapper;
 
+import com.knight.webcommon.model.entity.TestData;
 import com.knight.webcommon.model.entity.TestEntityDTO;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -17,10 +19,27 @@ class TestMapperTest {
     @Resource
     private TestMapper testMapper;
 
+    @DisplayName("测试查询数据库信息")
     @Test
     void getTestEntity() {
         String testId = "2021cvi";
         TestEntityDTO testEntityDTO = testMapper.getTestEntity(testId);
         System.out.println(testEntityDTO);
+    }
+
+    @DisplayName("测试插入数据库信息")
+    @Test
+    void addTestData() {
+        TestData testData = TestData.builder()
+                .testId("testId_5")
+                .message("testMessage_1")
+                .build();
+        int result = 0;
+        try {
+            result = testMapper.insertTestData(testData);
+            System.out.println(result);
+        } catch (Exception e) {
+            System.out.println("异常，捕获失败信息！！！\ntest_id 可能重复");
+        }
     }
 }

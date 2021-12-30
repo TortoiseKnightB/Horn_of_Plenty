@@ -19,4 +19,13 @@ public interface TestService {
      * @return TestEntityVO
      */
     TestEntityVO startTestService(String id);
+
+    /**
+     * 新增测试数据
+     *
+     * @param id      测试数据编号
+     * @param message 测试数据信息
+     * @return Boolean
+     */
+    Boolean addTestData(String id, String message);
 }

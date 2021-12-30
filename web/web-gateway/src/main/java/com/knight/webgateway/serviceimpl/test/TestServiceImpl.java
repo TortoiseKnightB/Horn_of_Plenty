@@ -1,5 +1,6 @@
 package com.knight.webgateway.serviceimpl.test;
 
+import cn.hutool.core.util.StrUtil;
 import com.knight.webcommon.model.entity.TestEntityDTO;
 import com.knight.webgateway.manager.test.TestManager;
 import com.knight.webgateway.model.response.vo.TestEntityVO;
@@ -21,7 +22,6 @@ public class TestServiceImpl implements TestService {
     @Resource
     private TestManager testManager;
 
-
     /**
      * 网关接口测试 Service
      *
@@ -30,7 +30,27 @@ public class TestServiceImpl implements TestService {
      */
     @Override
     public TestEntityVO startTestService(String id) {
+        if (StrUtil.isBlank(id)) {
+            // TODO 报错，需要配置全局异常拦截器
+            return null;
+        }
         TestEntityDTO testEntityDTO = testManager.startTestManager(id);
         return TestBuilderHelper.build(testEntityDTO);
+    }
+
+    /**
+     * 新增测试数据
+     *
+     * @param id      测试数据编号
+     * @param message 测试数据信息
+     * @return Boolean
+     */
+    @Override
+    public Boolean addTestData(String id, String message) {
+        if (StrUtil.isBlank(id)) {
+            // TODO 报错，需要配置全局异常拦截器
+            return null;
+        }
+        return testManager.addTestData(id, message);
     }
 }

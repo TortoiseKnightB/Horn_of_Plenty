@@ -17,4 +17,8 @@ public class TestParam {
     // TODO @NotNull
     @JsonProperty("Id")
     private String id;
+
+    @ApiModelProperty(value = "消息内容")
+    @JsonProperty("Message")
+    private String message;
 }

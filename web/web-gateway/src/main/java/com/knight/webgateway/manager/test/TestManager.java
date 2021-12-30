@@ -39,7 +39,16 @@ public class TestManager {
             // TODO 抛出调用结果返回失败异常
         }
         return resultInfo.getData();
+    }
 
-//        return null;
+    public Boolean addTestData(String id, String message) {
+        ResultInfo<Boolean> resultInfo = testApi.addTestData(id, message);
+        if (resultInfo == null) {
+            // TODO 抛出中台调用异常
+        }
+        if (resultInfo.getSuccess() == false) {
+            // TODO 抛出调用结果返回失败异常
+        }
+        return resultInfo.getData();
     }
 }

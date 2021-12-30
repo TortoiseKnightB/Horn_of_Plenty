@@ -46,4 +46,16 @@ public class TestController {
         return new ResultInfo<TestEntityVO>().succeed(testService.startTestService(param.getId()));
     }
 
+    /**
+     * 数据库测试样例： api/test/AddTestData
+     *
+     * @param param 数据库测试入参
+     * @return 修改数据库是否成功
+     */
+    @ApiOperation(value = "测试controller：新增数据库信息")
+    @PostMapping(value = "/AddTestData")
+    public ResultInfo<Boolean> addTestData(@RequestBody TestParam param) {
+        return new ResultInfo<Boolean>().succeed(testService.addTestData(param.getId(), param.getMessage()));
+    }
+
 }

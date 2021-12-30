@@ -21,4 +21,13 @@ public interface TestApi {
      */
     ResultInfo<TestEntityDTO> startTestApi(String id);
 
+    /**
+     * 新增数据测试接口
+     *
+     * @param id      数据编号
+     * @param message 数据信息
+     * @return
+     */
+    ResultInfo<Boolean> addTestData(String id, String message);
+
 }
