@@ -13,6 +13,8 @@
     </div>
     <br/>
     <Coin/>
+    <br/>
+    <TestController/>
   </div>
 </template>
 
@@ -20,13 +22,15 @@
 import HelloWorld from "./components/HelloWorld"
 import Hero from "./components/Hero";
 import Coin from "./components/Coin";
+import TestController from "./components/TestController";
 
 export default {
   name: 'App',
   components: {
     HelloWorld,
     Hero,
-    Coin
+    Coin,
+    TestController
   }
 }
 </script>
