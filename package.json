@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "@arco-design/web-vue": "^2.13.0"
+  },
+  "dependencies": {
+    "vue-router": "^3.5.3",
+    "vuex": "^3.6.2"
+  }
+}
