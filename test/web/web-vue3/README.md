@@ -13,7 +13,7 @@ npm install -g @vue/cli
 # OR
 yarn global add @vue/cli
 
-## 创建(选默认的 vue3.0 配置选项即可)
+## 创建(手动配置 vue3.0 + vuex + router)
 vue create web-vue3
 
 ## 启动
@@ -30,4 +30,10 @@ yarn serve
 npm install --save-dev @arco-design/web-vue
 # yarn
 yarn add --dev @arco-design/web-vue
+```
+
+### axios 引入
+
+```bash
+yarn add axios
 ```
