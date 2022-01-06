@@ -34,7 +34,7 @@ public class CorsConfig {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         //允许跨域的域名，可以用*表示允许任何域名使用
 //        corsConfiguration.addAllowedOriginPattern("*");
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:8090"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:8090", "http://localhost:8091"));
         //允许请求头
         corsConfiguration.setAllowedHeaders(Arrays.asList("Content-Type"));
         corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST"));

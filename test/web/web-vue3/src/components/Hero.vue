@@ -17,7 +17,7 @@ export default {
 
     // data
     // v-model 双向绑定用这个顶替
-    let heroName = ref("")
+    const heroName = ref("")
 
     // computed
     // state

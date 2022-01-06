@@ -13,27 +13,38 @@
 </template>
 
 <script>
-import {onMounted, ref} from "vue";
+import {onMounted, reactive, toRefs} from "vue";
+import axios from "axios"
 
 export default {
   name: "Coin",
   setup() {
-    let info = ref(null)
-    let loading = ref(null)
-    let errored = ref(true)
+    const data = reactive({
+      info: null,
+      loading: true,
+      errored: null
+    })
+
     // 官方建议：使用计算属性或方法来代替过滤器
     const filter = (value) => value.toFixed(2)
 
     onMounted(() => {
-      // todo axios
-      errored.value = false
+      axios
+          .get("https://api.coindesk.com/v1/bpi/currentprice.json")
+          .then(response => {
+            console.log(response.data.bpi)
+            data.info = response.data.bpi
+            data.errored = false
+          })
+          .catch(error => {
+            console.log(error)
+            data.errored = true
+          })
+          .finally(() => data.loading = false)
     })
 
-
     return {
-      info,
-      loading,
-      errored,
+      ...toRefs(data),
       filter
     }
   }

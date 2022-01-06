@@ -23,6 +23,7 @@ export default {
       // state
       data: computed(() => store.state.helloworldStore.storeData),
       sum: computed(() => store.state.helloworldStore.storeSum),
+      // sum: computed(() => store.state.helloworldStore.storeSum),
       heroList: computed(() => store.state.heroStore.heroList),
       // getters
       getters_data: computed(() => store.getters["helloworldStore/testGetters"])
