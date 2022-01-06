@@ -1,6 +1,6 @@
 import {createApp} from 'vue'
 import App from './App.vue'
-import router from './router'
+import router from './router/router'
 import store from './store'
 // arco-design 组件库引入
 import ArcoVue from '@arco-design/web-vue'
