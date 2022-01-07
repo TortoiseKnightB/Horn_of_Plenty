@@ -63,7 +63,7 @@ export default {
           })
           .catch(error => {
             console.log(error)
-            console("插入数据失败")
+            console.log("插入数据失败")
           })
     }
   }
