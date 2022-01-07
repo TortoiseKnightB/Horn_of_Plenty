@@ -1,30 +1,25 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+<!--  <div>-->
+<!--    &lt;!&ndash; Vue中借助router-link标签实现路由的切换 &ndash;&gt;-->
+<!--    <router-link to="/router1">ROUTER_1</router-link>-->
+<!--    <router-link to="/router2">ROUTER_2</router-link>-->
+<!--  </div>-->
+  <div>
+    <!-- 指定组件的呈现位置 -->
+    <router-view></router-view>
   </div>
-  <router-view/>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 
-#nav {
-  padding: 30px;
-}
+<script>
+import Home from "@/views/Home";
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+export default {
+  name: 'App',
+  components: {
+    Home
+  }
 }
+</script>
 
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+
