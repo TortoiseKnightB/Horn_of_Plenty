@@ -1,10 +1,10 @@
-<!-- 自我介绍卡片栅栏 -->
+<!-- 主页分页器栅栏 -->
 <template>
   <div>
     <a-row class="grid-demo" justify="space-around">
       <a-col :span="16">
         <div>
-          <testContent/>
+          <PaginationHome/>
         </div>
       </a-col>
     </a-row>
@@ -12,12 +12,12 @@
 </template>
 
 <script>
-import testContent from "@/views/testContent";
+import PaginationHome from "@/components/pagination/PaginationHome";
 
 export default {
-  name: "test",
+  name: "PaginationHomeGrid",
   components: {
-    testContent
+    PaginationHome
   }
 }
 </script>

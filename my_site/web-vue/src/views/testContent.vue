@@ -1,23 +1,32 @@
 <template>
-  <div :style="{ display: 'flex' }">
-    <a-card :hoverable="true" :style="{ width: '100%' }"  :bordered="false">
-<!--      <template #extra>-->
-<!--        <a-link>More</a-link>-->
-<!--      </template>-->
-      ByteDance's core product, Toutiao ("Headlines"), is a content platform in
-      China and around the world. Toutiao started out as a news recommendation
-      engine and gradually evolved into a platform delivering content in various
-      formats.
-    </a-card>
+  <div class="wrapper">
+    <ul id="basic-demo">
+      <li v-for="(_, index) of Array(40)" :key="index">This is the content</li>
+    </ul>
+    <a-back-top target-container="#basic-demo" :style="{position:'absolute'}"/>
   </div>
 </template>
 
+
 <script>
+
 export default {
-  name: "testContent"
+  name: "testContent",
 }
 </script>
 
-<style scoped>
 
-</style>
+<!--<style scoped lang="less">-->
+<!--.wrapper {-->
+<!--  position: relative;-->
+
+<!--  ul {-->
+<!--    height: 200px;-->
+<!--    overflow-y: auto;-->
+
+<!--    li {-->
+<!--      line-height: 30px;-->
+<!--    }-->
+<!--  }-->
+<!--}-->
+<!--</style>-->

@@ -1,26 +1,28 @@
-<!-- 自我介绍卡片栅栏 -->
+<!-- 图片预览栅栏 -->
 <template>
   <div>
     <a-row class="grid-demo" justify="space-around">
-      <a-col :span="16">
+      <a-col :span="20">
         <div>
-          <testContent/>
+          <ImagePreview/>
         </div>
       </a-col>
     </a-row>
   </div>
 </template>
 
+
 <script>
-import testContent from "@/views/testContent";
+import ImagePreview from "@/components/image/ImagePreview";
 
 export default {
-  name: "test",
+  name: "ImagePreviewGrid",
   components: {
-    testContent
+    ImagePreview
   }
 }
 </script>
+
 
 <style scoped>
 .grid-demo {

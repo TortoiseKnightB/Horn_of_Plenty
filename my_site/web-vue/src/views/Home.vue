@@ -59,13 +59,20 @@
         <MenuTopGrid/>
       </a-layout-header>
       <a-layout style="padding: 0 24px;">
-        <!--    头像    -->
-        <AvatarGrid/>
         <a-layout-content>
+          <!--    头像    -->
+          <AvatarGrid/>
           <!-- 自我介绍卡片 -->
           <ProfileCardGrid/>
+          <!-- 图片预览 -->
+          <ImagePreviewGrid/>
+          <!-- 分页器 -->
+          <PaginationHomeGrid/>
         </a-layout-content>
-        <a-layout-footer>Footer</a-layout-footer>
+        <a-layout-footer>
+          <!-- 页脚卡片 -->
+          <FooterCardGrid/>
+        </a-layout-footer>
       </a-layout>
     </a-layout>
   </a-layout>
@@ -85,6 +92,9 @@ import {
 import MenuTopGrid from "@/components/menu/grid/MenuTopGrid";
 import AvatarGrid from "@/components/avatar/grid/AvatarGrid";
 import ProfileCardGrid from "@/components/card/grid/ProfileCardGrid";
+import ImagePreviewGrid from "@/components/image/grid/ImagePreviewGrid";
+import PaginationHomeGrid from "@/components/pagination/grid/PaginationHomeGrid";
+import FooterCardGrid from "@/components/card/grid/FooterCardGrid";
 
 export default defineComponent({
   components: {
@@ -95,6 +105,9 @@ export default defineComponent({
     MenuTopGrid,
     AvatarGrid,
     ProfileCardGrid,
+    ImagePreviewGrid,
+    PaginationHomeGrid,
+    FooterCardGrid
   },
   methods: {
     onClickMenuItem(key) {
@@ -154,6 +167,7 @@ export default defineComponent({
   font-size: 16px;
   font-stretch: condensed;
   text-align: center;
+  max-height: 40px;
 }
 
 .layout-demo :deep(.arco-layout-content) {
@@ -165,4 +179,11 @@ export default defineComponent({
   font-stretch: condensed;
   text-align: center;
 }
+
+/*!* 自定义添加样式 *!*/
+/*.layout-demo :deep(.arco-layout-content) {*/
+/*  margin-bottom: 15px;*/
+/*}*/
+
+
 </style>

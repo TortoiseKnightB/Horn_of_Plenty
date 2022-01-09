@@ -1,10 +1,10 @@
-<!-- 自我介绍卡片栅栏 -->
+<!-- 页脚卡片栅栏 -->
 <template>
   <div>
-    <a-row class="grid-demo" justify="space-around">
+    <a-row class="grid-demo" justify="center" :wrap="true">
       <a-col :span="16">
         <div>
-          <testContent/>
+          <FooterCard/>
         </div>
       </a-col>
     </a-row>
@@ -12,15 +12,16 @@
 </template>
 
 <script>
-import testContent from "@/views/testContent";
+import FooterCard from "@/components/card/FooterCard";
 
 export default {
-  name: "test",
+  name: "FooterCardGrid",
   components: {
-    testContent
+    FooterCard
   }
 }
 </script>
+
 
 <style scoped>
 .grid-demo {
@@ -46,4 +47,5 @@ export default {
 .grid-demo .arco-col:nth-child(2n + 1) {
   background-color: var(--color-primary-light-4);
 }
+
 </style>
