@@ -1,10 +1,9 @@
-<!-- 自我介绍卡片栅栏 -->
 <template>
   <div>
     <a-row class="grid-demo" justify="space-around">
       <a-col :span="16">
         <div>
-          <testContent/>
+          <MenuSlide/>
         </div>
       </a-col>
     </a-row>
@@ -12,12 +11,12 @@
 </template>
 
 <script>
-import testContent from "@/views/testContent";
+import MenuSlide from "@/components/menu/MenuSlide";
 
 export default {
-  name: "test",
+  name: "MenuSlideGrid",
   components: {
-    testContent
+    MenuSlide
   }
 }
 </script>

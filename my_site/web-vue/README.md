@@ -1,19 +1,2 @@
-# web-vue
-
-## Project setup
-```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+ yarn add less
+ yarn add less-loader@7.3.0 版本太高会报错
