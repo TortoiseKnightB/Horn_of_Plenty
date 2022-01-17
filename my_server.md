@@ -12,7 +12,7 @@
 ```
 /root/	# 用户名为 root
 ├── local		# 存放本地应用文件
-│   └── mysql	
+│   └── docker	
 │
 └── my_tar	# 存放压缩包
 ```
@@ -141,6 +141,36 @@ mysql -u root -p
 ##### 文件结构
 
 - 配置文件路径 `/etc/mysql/my.cnf` 等（查找语句 ` mysql --help | grep my.cnf`）
+
+##### 在 mysql 中创建 nacos 数据库
+
+- 进入 docker 中的 mysql
+
+```bash
+docker exec -it mysql /bin/bash 
+mysql -u root -p
+```
+
+- 将 .sql 文件传入 docker
+
+- 创建 nacos 配置数据库
+
+```sql
+CREATE DATABASE nacos_config;
+USE nacos_config;
+```
+
+- 导入 .sql 文件
+
+
+- 更新 nacos application.properties配置
+
+
+------
+
+------
+
+------
 
 ------
 
