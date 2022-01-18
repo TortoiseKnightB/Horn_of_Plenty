@@ -1,4 +1,4 @@
-# MyServer 
+# MyServer
 
 - 本文档用来记录我的服务器配置信息，以便日后查询
 
@@ -10,11 +10,11 @@
 ### 目录结构
 
 ```
-/root/	# 用户名为 root
-├── local		# 存放本地应用文件
-│   └── docker	
+/root/    # 用户名为 root
+├── local        # 存放本地应用文件
+│   └── docker    
 │
-└── my_tar	# 存放压缩包
+└── my_tar    # 存放压缩包
 ```
 
 ### Docker
@@ -144,6 +144,14 @@ mysql -u root -p
 
 ##### 在 mysql 中创建 nacos 数据库
 
+- 将 .sql 文件传入 docker
+
+```bash
+# 先将 nacos 文件夹里面的 nacos-mysql.sql 文件传到云服务器
+# a910f9d80e8a 为容器id，.sql 暂存在/tmp
+docker cp ./nacos-mysql.sql a910f9d80e8a:/tmp
+```
+
 - 进入 docker 中的 mysql
 
 ```bash
@@ -151,20 +159,21 @@ docker exec -it mysql /bin/bash
 mysql -u root -p
 ```
 
-- 将 .sql 文件传入 docker
-
 - 创建 nacos 配置数据库
 
 ```sql
 CREATE DATABASE nacos_config;
 USE nacos_config;
+
+show databases;
 ```
 
 - 导入 .sql 文件
 
-
-- 更新 nacos application.properties配置
-
+```bash
+source /tmp/nacos-mysql.sql;
+show tables;
+```
 
 ------
 
@@ -181,7 +190,8 @@ USE nacos_config;
 
 ------
 
-// TODO	以下自定义配置失效，暂时略过，以后补充
+// TODO    以下自定义配置失效，暂时略过，以后补充
+
 - ~~解压到 /usr/local/，并改名为 mysql~~
 - ~~初始化数据库~~ 
 
@@ -223,12 +233,11 @@ cd /usr/local/mysql/ ; \
 ```
 
 - 从提示信息中找到初始密码
+
 - 启动服务
 
-
-
-
 - 发现 mysql 中的 bin 目录下没有 mysql.server 文件（mysql.server 实际上为一个链接文件，链接 ../support-files/mysql.server，是一个启动脚本）
+
 - 在 bin 目录下创建 mysql.server 的链接  
 
 ```bash
@@ -236,3 +245,10 @@ cd /usr/local/mysql/
 ln -s ./support-files/mysql.server ./bin/mysql.server
 ```
 
+------
+
+------
+
+------
+
+### Nacos
