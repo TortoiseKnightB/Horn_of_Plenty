@@ -252,3 +252,16 @@ ln -s ./support-files/mysql.server ./bin/mysql.server
 ------
 
 ### Nacos
+
+- 安装(先用单例模式验证一下)
+
+```bash
+docker pull nacos/nacos-server 
+# 限制占用内存大小，以单例模式启动
+docker run --name nacos_1 -e JVM_XMS=256m -e JVM_XMX=256m --env MODE=standalone -p 8848:8848 nacos/nacos-server
+# 退出去
+docker start nacos_1
+docker exec -it nacos_1 /bin/bash
+# 进入到 nacos/bin，这里自动启动单例模式
+sh docker-startup.sh 
+```
