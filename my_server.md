@@ -253,7 +253,7 @@ ln -s ./support-files/mysql.server ./bin/mysql.server
 
 ### Nacos
 
-- 安装(先用单例模式验证一下)
+##### 安装-单例模式
 
 ```bash
 docker pull nacos/nacos-server 
@@ -262,6 +262,35 @@ docker run --name nacos_1 -e JVM_XMS=256m -e JVM_XMX=256m --env MODE=standalone 
 # 退出去
 docker start nacos_1
 docker exec -it nacos_1 /bin/bash
+```
+
+- 修改 application.properties 文件，配置外部数据库
+
+```bash
+cd /home/nacos/conf
+# 先备份，再修改
+cp application.properties application.properties.bk
+vim application.properties
+
+############ custome ############
+spring.datasource.platform=mysql
+
+db.num=1
+db.url.0=jdbc:mysql://host:3306/nacos_config?characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&serverTimezone=GMT%2b8
+db.user=root
+db.password=password
+```
+
+- 改完配置后重新启动 nacos 容器
+
+```bash
 # 进入到 nacos/bin，这里自动启动单例模式
 sh docker-startup.sh 
+# 这里有点小问题，但是不影响，退出docker重启nacos也行
 ```
+
+------
+
+### Sentinel
+
+- 
