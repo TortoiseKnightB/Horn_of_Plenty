@@ -17,6 +17,34 @@
 └── my_tar    # 存放压缩包
 ```
 
+### JDK
+
+- 从官网（https://www.oracle.com/java/technologies/downloads/#java8）下载 jdk 压缩包，放入 `/root/my_tar` 文件夹下
+- 解压到对应位置
+
+```bash
+cd /root/local
+mkdir java
+tar -zxv -f /root/my_tar/jdk-8u321-linux-x64.tar.gz -C /root/local/java/
+```
+
+- 解压后我的文件路径为 `/root/local/java/jdk1.8.0_321`
+- 设置环境变量
+
+```bash
+vim /etc/profile
+####### 末尾添加 ######
+export JAVA_HOME=/root/local/java/jdk1.8.0_321
+export PATH=$JAVA_HOME/bin:$PATH
+# 让修改生效
+source /etc/profile
+# 检查测试
+echo $PATH
+java -version
+```
+
+------
+
 ### Docker
 
 - 官方安装文档：https://docs.docker.com/engine/install/centos/
@@ -289,8 +317,68 @@ sh docker-startup.sh
 # 这里有点小问题，但是不影响，退出docker重启nacos也行
 ```
 
+- 验证：访问 `http://host:8848/nacos`，登录账号密码都为 nacos
+
 ------
 
 ### Sentinel
 
-- 
+- 存在问题
+
+```bash
+目前 sentinel 服务端部署在 linux，sentinel 客户端部署在本机。需要客户端与服务端双向通信（sentinel 服务端能连通本地客户端 ip：端口号，本地能连通 sentinel 服务端 ip：端口号/默认8719） sentinel 才能正常监控，由于服务端无法连通本地客户端，故目前 sentinel 不可用
+解决方案：1、服务端与客户端部署在同一台服务器上。2、客户端与服务端互相连通
+```
+
+- 可用方案
+
+```bash
+无法监控，但是可以通过远程 nacos 直接写入持久化规则，达到流控的目的;
+
+或者直接写入代码（可以在配置中心设置开关，让每个控制参数从配置中心取值，这样在配置中心更改即可）
+```
+
+- 规则语法
+
+```bash
+#  Nacos 中 Sentinel 的持久化配置规则（在 sentinel 中更改后，规则无法保存最新值。。。）
+
+  resource：资源名称；
+  limitApp：来源应用；
+  grade：阈值类型，0表示线程数，1表示QPS；
+  count：单机阈值；
+  strategy：流控模式，0表示直接，1表示关联，2表示链路；
+  controlBehavior：流控效果，0表示快速失败，1表示Warm Up，2表示排队等待；
+  clusterMode：是否集群
+```
+
+##### 在 docker 上安装(没有官方镜像，感觉这个不是太好用，以后自己制作一个)
+
+- 安装镜像
+
+```bash
+docker search sentinel
+docker pull bladex/sentinel-dashboard
+docker images
+```
+
+- 启动
+
+```bash
+# 从下文发现，sentinel 默认端口为 8858
+docker run --name sentinel_1.8.0 -p 8858:8858 bladex/sentinel-dashboard
+```
+
+- PS：
+  
+  - 进入 sentinel 的容器后，发现里面只有文件结构特别简单，只有 `/bladex/sentinel/app.jar`
+  - 且用命令 `ps` 可以看见 sentinel 的默认端口为 8858
+
+- 验证：访问 `http://host:8858/`，登录账号密码都为 sentinel
+
+------
+
+```bash
+mkdir /root/local/sentinel
+cp /root/my_tar/sentinel-dashboard-1.8.0.jar /root/local/sentinel/
+```
