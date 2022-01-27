@@ -319,6 +319,10 @@ sh docker-startup.sh
 
 - 验证：访问 `http://host:8848/nacos`，登录账号密码都为 nacos
 
+- 注意：
+  
+  - 在本地配置的时候，为了让 nacos 支持 mysql8.0，需要添加文件夹及数据库驱动 `nacos\plugins\mysql\mysql-connector-java-8.x.xx.jar`
+
 ------
 
 ### Sentinel
@@ -382,3 +386,166 @@ docker run --name sentinel_1.8.0 -p 8858:8858 bladex/sentinel-dashboard
 mkdir /root/local/sentinel
 cp /root/my_tar/sentinel-dashboard-1.8.0.jar /root/local/sentinel/
 ```
+
+------
+
+### Seata
+
+##### 在 docker 上安装
+
+- mysql 上搭建相应数据库
+  
+  - 创建数据库 seata
+
+- 创建表
+
+```sql
+use seata;
+-- -------------------------------- The script used when storeMode is 'db' --------------------------------
+-- the table to store GlobalSession data
+CREATE TABLE IF NOT EXISTS `global_table`
+(
+    `xid`                       VARCHAR(128) NOT NULL,
+    `transaction_id`            BIGINT,
+    `status`                    TINYINT      NOT NULL,
+    `application_id`            VARCHAR(32),
+    `transaction_service_group` VARCHAR(32),
+    `transaction_name`          VARCHAR(128),
+    `timeout`                   INT,
+    `begin_time`                BIGINT,
+    `application_data`          VARCHAR(2000),
+    `gmt_create`                DATETIME,
+    `gmt_modified`              DATETIME,
+    PRIMARY KEY (`xid`),
+    KEY `idx_gmt_modified_status` (`gmt_modified`, `status`),
+    KEY `idx_transaction_id` (`transaction_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+-- the table to store BranchSession data
+CREATE TABLE IF NOT EXISTS `branch_table`
+(
+    `branch_id`         BIGINT       NOT NULL,
+    `xid`               VARCHAR(128) NOT NULL,
+    `transaction_id`    BIGINT,
+    `resource_group_id` VARCHAR(32),
+    `resource_id`       VARCHAR(256),
+    `branch_type`       VARCHAR(8),
+    `status`            TINYINT,
+    `client_id`         VARCHAR(64),
+    `application_data`  VARCHAR(2000),
+    `gmt_create`        DATETIME(6),
+    `gmt_modified`      DATETIME(6),
+    PRIMARY KEY (`branch_id`),
+    KEY `idx_xid` (`xid`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+-- the table to store lock data
+CREATE TABLE IF NOT EXISTS `lock_table` (
+    `row_key` VARCHAR(128) NOT NULL,
+    `xid` VARCHAR(128),
+    `transaction_id` BIGINT,
+    `branch_id` BIGINT NOT NULL,
+    `resource_id` VARCHAR(256),
+    `table_name` VARCHAR(32),
+    `pk` VARCHAR(36),
+    `gmt_create` DATETIME,
+    `gmt_modified` DATETIME,
+    PRIMARY KEY (`row_key`),
+    KEY `idx_branch_id` (`branch_id`)
+)  ENGINE=INNODB DEFAULT CHARSET=UTF8;
+```
+
+- 自定义业务数据库后需要添加表 undo_log
+
+```sql
+-- for AT mode you must to init this sql for you business database. the seata server not need it.
+CREATE TABLE IF NOT EXISTS `undo_log`
+(
+    `branch_id`     BIGINT       NOT NULL COMMENT 'branch transaction id',
+    `xid`           VARCHAR(128) NOT NULL COMMENT 'global transaction id',
+    `context`       VARCHAR(128) NOT NULL COMMENT 'undo_log context,such as serialization',
+    `rollback_info` LONGBLOB     NOT NULL COMMENT 'rollback info',
+    `log_status`    INT(11)      NOT NULL COMMENT '0:normal status,1:defense status',
+    `log_created`   DATETIME(6)  NOT NULL COMMENT 'create datetime',
+    `log_modified`  DATETIME(6)  NOT NULL COMMENT 'modify datetime',
+    UNIQUE KEY `ux_undo_log` (`xid`, `branch_id`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARSET = utf8 COMMENT ='AT transaction mode undo table';
+```
+
+- 安装镜像
+
+```bash
+docker search seata
+docker pull seataio/seata-server:1.4.2
+docker images
+```
+
+```bash
+docker run --name seata1.4.2 -p 8091:8091 seataio/seata-server
+```
+
+- 修改 server 端的配置文件
+
+```bash
+docker exec -it seata1.4.2 sh
+cd resources/
+
+# 先备份 file.conf、registry.conf
+cp file.conf file.conf.bk
+cp registry.conf registry.conf.bk
+
+# 修改 file.conf 文件
+vi file.conf
+
+store {
+  mode = "db"
+  ## database store property
+  db {
+    driverClassName = "com.mysql.cj.jdbc.Driver"
+    url = "jdbc:mysql://host:3306/seata?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false"
+    user = "root"
+    password = "password"
+  }
+}
+
+# 修改 registry.conf 文件
+vi registry.conf
+
+registry {
+  type = "nacos"
+
+  nacos {
+    serverAddr = "129.226.227.79:8848"
+    username = "nacos"
+    password = "nacos"
+  }
+}
+```
+
+- 查看对应数据库版本，拷贝相应的数据库驱动文件进去
+
+```sql
+show variables like "%version%";
+```
+
+```bash
+# 放入新的数据库驱动，移除旧驱动
+docker cp /root/my_tar/mysql-connector-java-8.0.27.jar seata1.4.2:/seata-server/libs
+rm /seata-server/libs/mysql-connector-java-5.1.35.jar 
+```
+
+- 重启容器 seata1.4.2，在 nacos 上检查是否注册成功
+
+```bash
+# 重启
+docker stop seata1.4.2 
+docker start seata1.4.2 
+# 检查日志
+docker container logs seata1.4.2 
+```
+
+sh seata-server.sh -h 129.226.227.79 -p 8091
