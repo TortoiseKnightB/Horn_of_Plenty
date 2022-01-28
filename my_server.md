@@ -549,3 +549,7 @@ docker container logs seata1.4.2
 ```
 
 sh seata-server.sh -h 129.226.227.79 -p 8091
+
+注意：数据库的时区应该和其他服务保持一致
+
+遇到一个大坑，storage写数据库时一直报 global lock aquire failed，最后删掉数据库重建，莫名其妙搞定
