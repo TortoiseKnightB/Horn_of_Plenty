@@ -397,7 +397,7 @@ cp /root/my_tar/sentinel-dashboard-1.8.0.jar /root/local/sentinel/
   
   - 创建数据库 seata
 
-- 创建表
+- 创建表(可以去官网找到对应版本的文件)
 
 ```sql
 use seata;
@@ -476,7 +476,7 @@ CREATE TABLE IF NOT EXISTS `undo_log`
   DEFAULT CHARSET = utf8 COMMENT ='AT transaction mode undo table';
 ```
 
-- 安装镜像
+- 安装镜像（远程部署尚未成功，本地部署可以参考，配置文件的修改基本相同）
 
 ```bash
 docker search seata
@@ -506,7 +506,7 @@ store {
   ## database store property
   db {
     driverClassName = "com.mysql.cj.jdbc.Driver"
-    url = "jdbc:mysql://host:3306/seata?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false"
+    url = "jdbc:mysql://mysql_host:3306/seata?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false"
     user = "root"
     password = "password"
   }
@@ -519,7 +519,7 @@ registry {
   type = "nacos"
 
   nacos {
-    serverAddr = "129.226.227.79:8848"
+    serverAddr = "nacos_host:8848"
     username = "nacos"
     password = "nacos"
   }
@@ -548,8 +548,13 @@ docker start seata1.4.2
 docker container logs seata1.4.2 
 ```
 
-sh seata-server.sh -h 129.226.227.79 -p 8091
+- 注意：
+  
+  - 数据库的时区应该和其他服务保持一致
+  - 远程 seata server 启动时，注册进 nacos 的为内部虚拟端口号，外部访问有问题。在启动时指定为外网端口号 `sh seata-server.sh -h 129.226.227.79 -p 8091`
+  - 遇到一个大坑，storage写数据库时一直报 global lock aquire failed，最后删掉数据库重建，莫名其妙搞定
 
-注意：数据库的时区应该和其他服务保持一致
-
-遇到一个大坑，storage写数据库时一直报 global lock aquire failed，最后删掉数据库重建，莫名其妙搞定
+- 其他问题猜测：
+  
+  - 问题：目前 seata server 只能在本地运行成功，部署到服务器后，order 向 storage 发送了服务请求，storage 执行了服务，但是无法返回给 order
+  - 猜测：外网无法联通本地网络（类似上面的 sentinel），服务。。。好像又不对
