@@ -43,6 +43,12 @@
             <version>1.6.3</version>
             <scope>compile</scope>
         </dependency>
+
+        <!--    自定义注解依赖项    -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

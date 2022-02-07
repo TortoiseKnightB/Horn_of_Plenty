@@ -1,5 +1,6 @@
 package com.knight.webgateway.controller.test;
 
+import com.knight.webcommon.aspect.annotation.TestAnnotation;
 import com.knight.webgateway.model.param.TestParam;
 import com.knight.webgateway.model.response.ResultInfo;
 import com.knight.webgateway.model.response.vo.TestEntityVO;
@@ -31,6 +32,18 @@ public class TestController {
     @GetMapping
     public String test() {
         return "test succeed";
+    }
+
+    /**
+     * 测试注解样例：api/test/TestAspect
+     *
+     * @return
+     */
+    @PostMapping(value = "/TestAspect")
+    @TestAnnotation
+    public String testAspect() {
+        System.out.println("test aspect");
+        return "test aspect succeed";
     }
 
     /**
