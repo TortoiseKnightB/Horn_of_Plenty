@@ -1,6 +1,8 @@
 package com.knight.webgateway.controller.test;
 
+import com.knight.webcommon.aspect.annotation.NotNullAnnotation;
 import com.knight.webcommon.aspect.annotation.TestAnnotation;
+import com.knight.webgateway.model.param.SchoolParam;
 import com.knight.webgateway.model.param.TestParam;
 import com.knight.webgateway.model.response.ResultInfo;
 import com.knight.webgateway.model.response.vo.TestEntityVO;
@@ -40,9 +42,11 @@ public class TestController {
      * @return
      */
     @PostMapping(value = "/TestAspect")
-    @TestAnnotation
-    public String testAspect() {
+//    @TestAnnotation
+    @NotNullAnnotation
+    public String testAspect(@RequestBody SchoolParam param) {
         System.out.println("test aspect");
+        System.out.println(param);
         return "test aspect succeed";
     }
 
