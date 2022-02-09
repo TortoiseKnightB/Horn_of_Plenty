@@ -1,5 +1,7 @@
 package com.knight.webgateway.controller.test;
 
+import com.knight.webcommon.aspect.annotation.ExceptionHandlerAnnotation;
+import com.knight.webcommon.aspect.annotation.NotBlank;
 import com.knight.webcommon.aspect.annotation.NotNullAnnotation;
 import com.knight.webcommon.aspect.annotation.TestAnnotation;
 import com.knight.webgateway.model.param.SchoolParam;
@@ -37,20 +39,6 @@ public class TestController {
     }
 
     /**
-     * 测试注解样例：api/test/TestAspect
-     *
-     * @return
-     */
-    @PostMapping(value = "/TestAspect")
-//    @TestAnnotation
-    @NotNullAnnotation
-    public String testAspect(@RequestBody SchoolParam param) {
-        System.out.println("test aspect");
-        System.out.println(param);
-        return "test aspect succeed";
-    }
-
-    /**
      * 数据库测试样例：api/test/GetTestDataById
      *
      * @param param 数据库测试入参
@@ -73,6 +61,45 @@ public class TestController {
     @PostMapping(value = "/AddTestData")
     public ResultInfo<Boolean> addTestData(@RequestBody TestParam param) {
         return new ResultInfo<Boolean>().succeed(testService.addTestData(param.getId(), param.getMessage()));
+    }
+
+    /**
+     * TestAnnotation 注解测试样例：api/test/TestAspect
+     *
+     * @return
+     */
+    @PostMapping(value = "/TestAspect")
+    @TestAnnotation
+    public String testAspect() {
+        System.out.println("test TestAnnotation");
+        return "test @TestAnnotation succeed";
+    }
+
+    /**
+     * NotNullAnnotation 注解测试样例：api/test/TestAspect2
+     *
+     * @return 注意观察参数为空时的输出信息
+     */
+    @PostMapping(value = "/TestAspect2")
+    @NotNullAnnotation
+    public String testAspect2(@RequestBody SchoolParam param) {
+        System.out.println("test NotNullAnnotation");
+        System.out.println(param);
+        return "test @NotNullAnnotation succeed";
+    }
+
+    /**
+     * ExceptionHandlerAnnotation 注解测试样例：api/test/TestAspect3
+     *
+     * @param param
+     * @return
+     */
+    @PostMapping("/TestAspect3")
+    @ExceptionHandlerAnnotation
+    public ResultInfo<String> testAspect3(@RequestBody SchoolParam param) {
+//        System.out.println("test ExceptionHandlerAnnotation");
+        int a = 10 / 0;
+        return new ResultInfo<String>().succeed(param.toString());
     }
 
 }
