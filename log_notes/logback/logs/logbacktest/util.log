@@ -1,0 +1,4 @@
+2022-02-09 19:03:51 [main] DEBUG com.knight.test.util.Util - debug
+2022-02-09 19:03:51 [main] INFO  com.knight.test.util.Util - info
+2022-02-09 19:03:51 [main] WARN  com.knight.test.util.Util - warn
+2022-02-09 19:03:51 [main] ERROR com.knight.test.util.Util - error
