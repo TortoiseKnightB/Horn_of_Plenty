@@ -1,6 +1,6 @@
 package com.knight.webcommon.aspect;
 
-import com.knight.webcommon.model.response.ResultInfo;
+import com.knight.gatewaycommon.model.response.ResultInfo;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;

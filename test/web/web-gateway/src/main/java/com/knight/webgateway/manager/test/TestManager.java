@@ -2,7 +2,7 @@ package com.knight.webgateway.manager.test;
 
 import com.knight.webcommon.api.TestApi;
 import com.knight.webcommon.model.entity.TestEntityDTO;
-import com.knight.webcommon.model.response.ResultInfo;
+import com.knight.gatewaycommon.model.response.ResultInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

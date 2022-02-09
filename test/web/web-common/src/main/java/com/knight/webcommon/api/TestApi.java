@@ -1,7 +1,7 @@
 package com.knight.webcommon.api;
 
+import com.knight.gatewaycommon.model.response.ResultInfo;
 import com.knight.webcommon.model.entity.TestEntityDTO;
-import com.knight.webcommon.model.response.ResultInfo;
 
 /**
  * 测试Api，中台对外接口，通过rpc方式发布出去

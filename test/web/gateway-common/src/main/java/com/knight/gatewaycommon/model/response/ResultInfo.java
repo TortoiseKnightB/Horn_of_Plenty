@@ -1,4 +1,4 @@
-package com.knight.webgateway.model.response;
+package com.knight.gatewaycommon.model.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * 网关接口返回结果包装类
+ * 接口返回结果封装类
  *
  * @author TortoiseKnightB
  * @date 2021/12/24

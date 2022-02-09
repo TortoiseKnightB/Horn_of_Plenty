@@ -1,12 +1,12 @@
 package com.knight.webgateway.controller.test;
 
+import com.knight.gatewaycommon.model.response.ResultInfo;
 import com.knight.webcommon.aspect.annotation.ExceptionHandlerAnnotation;
 import com.knight.webcommon.aspect.annotation.NotBlank;
 import com.knight.webcommon.aspect.annotation.NotNullAnnotation;
 import com.knight.webcommon.aspect.annotation.TestAnnotation;
 import com.knight.webgateway.model.param.SchoolParam;
 import com.knight.webgateway.model.param.TestParam;
-import com.knight.webgateway.model.response.ResultInfo;
 import com.knight.webgateway.model.response.vo.TestEntityVO;
 import com.knight.webgateway.service.test.TestService;
 import io.swagger.annotations.Api;
@@ -97,8 +97,8 @@ public class TestController {
     @PostMapping("/TestAspect3")
     @ExceptionHandlerAnnotation
     public ResultInfo<String> testAspect3(@RequestBody SchoolParam param) {
-//        System.out.println("test ExceptionHandlerAnnotation");
-        int a = 10 / 0;
+        System.out.println("test ExceptionHandlerAnnotation");
+//        int a = 10 / 0;
         return new ResultInfo<String>().succeed(param.toString());
     }
 

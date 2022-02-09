@@ -1,9 +1,9 @@
 package com.knight.webtest.api;
 
+import com.knight.gatewaycommon.model.response.ResultInfo;
 import com.knight.webcommon.api.TestApi;
 import com.knight.webcommon.model.entity.TestData;
 import com.knight.webcommon.model.entity.TestEntityDTO;
-import com.knight.webcommon.model.response.ResultInfo;
 import com.knight.webcommon.service.TestService;
 import com.knight.webtest.utils.BuildHelper;
 import org.springframework.stereotype.Component;
