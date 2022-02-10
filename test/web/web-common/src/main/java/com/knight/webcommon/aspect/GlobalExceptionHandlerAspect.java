@@ -19,24 +19,25 @@ import org.springframework.stereotype.Component;
 @Component
 public class GlobalExceptionHandlerAspect {
 
+    // TODO 待日志功能完成后，与日志合并成，并改成全局生效
     @Pointcut("@annotation(com.knight.webcommon.aspect.annotation.ExceptionHandlerAnnotation)")
     private void pointcut() {
     }
 
     @Around("pointcut()")
     public Object service(ProceedingJoinPoint pjp) {
-        System.out.println("around aspect start");
+        System.out.println("GlobalExceptionHandlerAspect start");
         Object result;
         Object[] args = pjp.getArgs();
         try {
+            System.out.println("GlobalExceptionHandlerAspect proceed");
             result = pjp.proceed(args);
         } catch (Throwable e) {
-            System.out.println("around exception");
+            System.out.println("GlobalExceptionHandlerAspect exception");
             String message = "系统错误";
             result = new ResultInfo<>().fail(message);
         }
-        System.out.println(result);
-        System.out.println("around aspect end");
+        System.out.println("GlobalExceptionHandlerAspect end");
         return result;
     }
 
