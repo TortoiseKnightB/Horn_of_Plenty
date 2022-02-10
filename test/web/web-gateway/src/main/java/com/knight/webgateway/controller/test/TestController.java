@@ -1,6 +1,8 @@
 package com.knight.webgateway.controller.test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.knight.gatewaycommon.model.response.ResultInfo;
+import com.knight.gatewaycommon.utils.JsonHelper;
 import com.knight.webcommon.aspect.annotation.*;
 import com.knight.webgateway.model.param.SchoolParam;
 import com.knight.webgateway.model.param.TestParam;
@@ -111,6 +113,23 @@ public class TestController {
         System.out.println("test");
 //        int a = 10 / 0;
         return new ResultInfo<String>().succeed(param);
+    }
+
+    /**
+     * JsonHelper 工具类测试样例：api/test/TestUtils1
+     *
+     * @param param
+     * @return
+     * @throws JsonProcessingException
+     */
+    @PostMapping("/TestUtils1")
+    public TestParam testUtils1(@RequestBody TestParam param) throws JsonProcessingException {
+        System.out.println(param);
+        String json = JsonHelper.toJSON(param);
+        System.out.println(json);
+        TestParam object = JsonHelper.toObject(json, TestParam.class);
+        System.out.println(object);
+        return object;
     }
 
 }

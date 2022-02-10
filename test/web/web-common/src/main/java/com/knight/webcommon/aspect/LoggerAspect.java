@@ -1,6 +1,10 @@
 package com.knight.webcommon.aspect;
 
+import cn.hutool.json.JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.knight.gatewaycommon.model.response.ResultInfo;
+import com.knight.gatewaycommon.utils.JsonHelper;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -47,7 +51,7 @@ public class LoggerAspect {
 
             elapsedTime = System.currentTimeMillis() - startTime;
             // TODO
-            logger.info("url: " + request.getRequestURI() + ", params: " + args.toString() + ", result: " + result.toString() + ", elapsedTime: " + String.valueOf(elapsedTime));
+            logger.info("url: " + request.getRequestURI() + ", params: " + JsonHelper.toJSON(args) + ", result: " + JsonHelper.toJSON(result) + ", elapsedTime: " + elapsedTime);
 
         } catch (Throwable e) {
             String message = "日志错误";
@@ -55,7 +59,11 @@ public class LoggerAspect {
 
             elapsedTime = System.currentTimeMillis() - startTime;
             // TODO
-            logger.error("url: " + request.getRequestURL() + ", params: " + args.toString() + ", result: " + result.toString() + ", elapsedTime: " + String.valueOf(elapsedTime));
+            try {
+                logger.info("url: " + request.getRequestURI() + ", params: " + JsonHelper.toJSON(args) + ", result: " + JsonHelper.toJSON(result) + ", elapsedTime: " + elapsedTime);
+            } catch (JsonProcessingException jsonProcessingException) {
+                jsonProcessingException.printStackTrace();
+            }
         }
 
         System.out.println("LoggerAspect end");
