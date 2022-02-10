@@ -2,10 +2,14 @@
 <configuration>
     <springProfile name="local">
         <property name="LOG_PATH" value="./logs"/>
-        <property name="INFO_LOG_NAME" value="${LOG_PATH}/logback_local.log"/>
-        <property name="PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n"/>
+        <property name="ALL_LOG_NAME" value="${LOG_PATH}/logback_all.log"/>
+        <property name="INFO_LOG_NAME" value="${LOG_PATH}/logback_info.log"/>
+        <property name="ERROR_LOG_NAME" value="${LOG_PATH}/logback_error.log"/>
+        <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度 %msg：日志消息，%n是换行符-->
+        <property name="PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n"/>
     </springProfile>
 
+    <!-- 控制台输出日志 -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>${PATTERN}</pattern>
@@ -13,15 +17,34 @@
         </encoder>
     </appender>
 
+    <!-- logback_all.log 日志 -->
+    <appender name="ALL_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--    接收所有级别的日志    -->
+        <File>${ALL_LOG_NAME}</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${ALL_LOG_NAME}-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>50MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- logback_info.log 日志 -->
     <appender name="INFO_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--    只接收 info、warn 级别的日志    -->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
         </filter>
-        <!--        <filter class="ch.qos.logback.classic.filter.LevelFilter">-->
-        <!--            <level>ERROR</level>-->
-        <!--            <onMatch>DENY</onMatch>-->
-        <!--            <onMismatch>ACCEPT</onMismatch>-->
-        <!--        </filter>-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>DENY</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
         <File>${INFO_LOG_NAME}</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${INFO_LOG_NAME}-%d{yyyy-MM-dd}.log</fileNamePattern>
@@ -36,11 +59,43 @@
         </encoder>
     </appender>
 
+    <!-- logback_error.log 日志 -->
+    <appender name="ERROR_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--    只接收 error 级别的日志    -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <File>${ERROR_LOG_NAME}</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${ERROR_LOG_NAME}-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>50MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- TODO 配置logstash -->
+<!--    <appender name="LOG_STASH" class="net.logstash.logback.appender.LogstashSocketAppender">-->
+<!--        <provider class="net.logstash.logback.composite.loggingevent.LoggingEventPatternJsonProvider">-->
+<!--            <pattern></pattern>-->
+<!--        </provider>-->
+<!--        <host></host>-->
+<!--        <port></port>-->
+<!--        <customFields></customFields>-->
+<!--    </appender>-->
+
 
     <springProfile name="local">
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="ALL_LOG"/>
             <appender-ref ref="INFO_LOG"/>
+            <appender-ref ref="ERROR_LOG"/>
         </root>
     </springProfile>
 

@@ -38,7 +38,6 @@ public class LoggerAspect {
         Object[] args = pjp.getArgs();
 
         try {
-            System.out.println("LoggerAspect proceed");
             result = pjp.proceed(args);
 
             elapsedTime = System.currentTimeMillis() - startTime;
@@ -46,13 +45,12 @@ public class LoggerAspect {
             logger.info("url: " + ", params: " + args.toString() + ", result: " + result.toString() + ", elapsedTime: " + String.valueOf(elapsedTime));
 
         } catch (Throwable e) {
-            System.out.println("LoggerAspect exception");
             String message = "日志错误";
             result = new ResultInfo<>().fail(message);
 
             elapsedTime = System.currentTimeMillis() - startTime;
             // TODO
-            logger.info("url: " + ", params: " + args.toString() + ", result: " + result.toString() + ", elapsedTime: " + String.valueOf(elapsedTime));
+            logger.error("url: " + ", params: " + args.toString() + ", result: " + result.toString() + ", elapsedTime: " + String.valueOf(elapsedTime));
         }
 
         System.out.println("LoggerAspect end");
