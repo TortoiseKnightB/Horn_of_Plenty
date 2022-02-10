@@ -9,6 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 全局日志记录
@@ -34,15 +38,16 @@ public class LoggerAspect {
         long startTime = System.currentTimeMillis();
         long elapsedTime;
 
+        HttpServletRequest request = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest();
+
         Object result;
         Object[] args = pjp.getArgs();
-
         try {
             result = pjp.proceed(args);
 
             elapsedTime = System.currentTimeMillis() - startTime;
             // TODO
-            logger.info("url: " + ", params: " + args.toString() + ", result: " + result.toString() + ", elapsedTime: " + String.valueOf(elapsedTime));
+            logger.info("url: " + request.getRequestURI() + ", params: " + args.toString() + ", result: " + result.toString() + ", elapsedTime: " + String.valueOf(elapsedTime));
 
         } catch (Throwable e) {
             String message = "日志错误";
@@ -50,7 +55,7 @@ public class LoggerAspect {
 
             elapsedTime = System.currentTimeMillis() - startTime;
             // TODO
-            logger.error("url: " + ", params: " + args.toString() + ", result: " + result.toString() + ", elapsedTime: " + String.valueOf(elapsedTime));
+            logger.error("url: " + request.getRequestURL() + ", params: " + args.toString() + ", result: " + result.toString() + ", elapsedTime: " + String.valueOf(elapsedTime));
         }
 
         System.out.println("LoggerAspect end");

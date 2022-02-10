@@ -109,7 +109,7 @@ public class TestController {
     @LoggerAnnotation
     public ResultInfo<String> testAspect4(@RequestBody String param) {
         System.out.println("test");
-        int a = 10 / 0;
+//        int a = 10 / 0;
         return new ResultInfo<String>().succeed(param);
     }
 
