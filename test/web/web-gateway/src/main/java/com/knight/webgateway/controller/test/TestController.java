@@ -113,10 +113,10 @@ public class TestController {
      */
     @PostMapping("/TestAspect4")
     @LoggerAnnotation
-    public ResultInfo<String> testAspect4(@RequestBody String param) {
+    public ResultInfo<SchoolParam> testAspect4(@RequestBody SchoolParam param) {
         System.out.println("test");
 //        int a = 10 / 0;
-        return new ResultInfo<String>().succeed(param);
+        return new ResultInfo<SchoolParam>().succeed(param);
     }
 
     // TODO 将测试用例按模块分开

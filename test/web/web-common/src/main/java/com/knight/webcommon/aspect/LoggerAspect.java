@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 @Aspect
 @Order(2)
 @Component
+// TODO 待升级为自己封装的日志组件
 public class LoggerAspect {
 
     private static Logger logger = LoggerFactory.getLogger(LoggerAspect.class);
@@ -43,6 +44,7 @@ public class LoggerAspect {
         long elapsedTime;
 
         HttpServletRequest request = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest();
+        System.out.println(request.getRemoteAddr());
 
         Object result;
         Object[] args = pjp.getArgs();
@@ -50,16 +52,18 @@ public class LoggerAspect {
             result = pjp.proceed(args);
 
             elapsedTime = System.currentTimeMillis() - startTime;
-            // TODO
-            logger.info("url: " + request.getRequestURI() + ", params: " + JsonHelper.toJSON(args) + ", result: " + JsonHelper.toJSON(result) + ", elapsedTime: " + elapsedTime);
+            // TODO 将日志信息封装成一个类进行输出
+            logger.info("url: " + request.getRequestURI() + ", params: " + JsonHelper.toJSON(args) + ", result: " + JsonHelper.toJSON(result) +
+                    ", elapsedTime: " + elapsedTime + ", success: " + ((ResultInfo) result).getSuccess());
 
         } catch (Throwable e) {
             String message = "日志错误";
             result = new ResultInfo<>().fail(message);
 
             elapsedTime = System.currentTimeMillis() - startTime;
-            // TODO
-            logger.info("url: " + request.getRequestURI() + ", params: " + JsonHelper.toJSON(args) + ", result: " + JsonHelper.toJSON(result) + ", elapsedTime: " + elapsedTime);
+            // TODO 将日志信息封装成一个类进行输出
+            logger.info("url: " + request.getRequestURI() + ", params: " + JsonHelper.toJSON(args) + ", result: " + JsonHelper.toJSON(result) +
+                    ", elapsedTime: " + elapsedTime + ", success: " + ((ResultInfo) result).getSuccess());
         }
 
         System.out.println("LoggerAspect end");
