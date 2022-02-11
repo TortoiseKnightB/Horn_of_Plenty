@@ -59,11 +59,7 @@ public class LoggerAspect {
 
             elapsedTime = System.currentTimeMillis() - startTime;
             // TODO
-            try {
-                logger.info("url: " + request.getRequestURI() + ", params: " + JsonHelper.toJSON(args) + ", result: " + JsonHelper.toJSON(result) + ", elapsedTime: " + elapsedTime);
-            } catch (JsonProcessingException jsonProcessingException) {
-                jsonProcessingException.printStackTrace();
-            }
+            logger.info("url: " + request.getRequestURI() + ", params: " + JsonHelper.toJSON(args) + ", result: " + JsonHelper.toJSON(result) + ", elapsedTime: " + elapsedTime);
         }
 
         System.out.println("LoggerAspect end");

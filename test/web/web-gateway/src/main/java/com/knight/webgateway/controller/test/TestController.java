@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.knight.gatewaycommon.model.response.ResultInfo;
 import com.knight.gatewaycommon.utils.JsonHelper;
 import com.knight.webcommon.aspect.annotation.*;
+import com.knight.webgateway.model.param.DateParam;
 import com.knight.webgateway.model.param.SchoolParam;
 import com.knight.webgateway.model.param.TestParam;
 import com.knight.webgateway.model.response.vo.TestEntityVO;
@@ -13,6 +14,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.sql.Date;
+import java.time.LocalDateTime;
+import java.util.TimeZone;
 
 /**
  * @author TortoiseKnightB
@@ -115,6 +119,8 @@ public class TestController {
         return new ResultInfo<String>().succeed(param);
     }
 
+    // TODO 将测试用例按模块分开
+
     /**
      * JsonHelper 工具类测试样例：api/test/TestUtils1
      *
@@ -129,6 +135,29 @@ public class TestController {
         System.out.println(json);
         TestParam object = JsonHelper.toObject(json, TestParam.class);
         System.out.println(object);
+        return object;
+    }
+
+    /**
+     * 时间格式测试样例：api/test/TestDate1
+     *
+     * @param dateParam
+     * @return
+     */
+    @PostMapping("/TestDate1")
+    public DateParam testDate1(@RequestBody DateParam dateParam) {
+        System.out.println("本地时间: " + LocalDateTime.now());
+        System.out.println("本地时区: " + TimeZone.getDefault());
+        System.out.println("param: " + dateParam);
+        System.out.println("Data: " + dateParam.getDate().toString());
+        System.out.println("DataTime: " + dateParam.getDateTime().toString());
+        System.out.println("LocalData: " + dateParam.getLocalDate().toString());
+        System.out.println("LocalDataTime: " + dateParam.getLocalDateTime().toString());
+        System.out.println("-------------------------------------------");
+        String json = JsonHelper.toJSON(dateParam);
+        System.out.println("toJSON: " + json);
+        DateParam object = JsonHelper.toObject(json, DateParam.class);
+        System.out.println("toObject: " + object);
         return object;
     }
 
