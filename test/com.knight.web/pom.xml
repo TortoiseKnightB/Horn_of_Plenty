@@ -11,7 +11,7 @@
     <modules>
         <module>gateway-common</module>
         <module>web-common</module>
-        <!--        <module>web-gateway</module>-->
+        <module>web-gateway</module>
         <module>web-test</module>
     </modules>
 
