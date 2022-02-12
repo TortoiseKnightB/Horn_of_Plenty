@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.knight</groupId>
+    <artifactId>com.knight.web</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>gateway-common</module>
+        <module>web-common</module>
+        <!--        <module>web-gateway</module>-->
+        <module>web-test</module>
+    </modules>
+
+
+    <!-- 统一管理jar包版本 -->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <junit.version>4.12</junit.version>
+        <!--        <log4j.version>1.2.17</log4j.version>-->
+        <lombook.version>1.18.22</lombook.version>
+        <mysql.version>8.0.25</mysql.version>
+        <druid-spring-boot-starter.version>1.2.5</druid-spring-boot-starter.version>
+        <mybatis.spring.boot.version>2.2.0</mybatis.spring.boot.version>
+        <swagger.version>1.6.3</swagger.version>
+    </properties>
+
+    <!--  子模块继承之后，提供作用：锁定版本+子module不用写groupId和version  -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- spring boot 2.6.1 -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>2.6.1</version>
+                <!-- 父类型都打包为pom类型 -->
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- spring cloud Hoxton.SR1 -->
+            <!--            <dependency>-->
+            <!--                <groupId>org.springframework.cloud</groupId>-->
+            <!--                <artifactId>spring-cloud-dependencies</artifactId>-->
+            <!--                <version>Hoxton.SR1</version>-->
+            <!--                <type>pom</type>-->
+            <!--                <scope>import</scope>-->
+            <!--            </dependency>-->
+            <!-- spring cloud alibaba -->
+            <!--            <dependency>-->
+            <!--                <groupId>com.alibaba.cloud</groupId>-->
+            <!--                <artifactId>spring-cloud-alibaba-dependencies</artifactId>-->
+            <!--                <version>2.1.0.RELEASE</version>-->
+            <!--                <type>pom</type>-->
+            <!--                <scope>import</scope>-->
+            <!--            </dependency>-->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid-spring-boot-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${mybatis.spring.boot.version}</version>
+            </dependency>
+
+            <!--            <dependency>-->
+            <!--                <groupId>log4j</groupId>-->
+            <!--                <artifactId>log4j</artifactId>-->
+            <!--                <version>${log4j.version}</version>-->
+            <!--            </dependency>-->
+
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombook</groupId>
+                <artifactId>lombook</artifactId>
+                <version>${lombook.version}</version>
+                <!--        If project Y depends on project Z, the owner of project Y can mark project Z as an optional dependency, using the "optional" element. When project X depends on project Y, X will depend only on Y and not on Y's optional dependency Z. The owner of project X may then explicitly add a dependency on Z, at her option. (It may be helpful to think of optional dependencies as "excluded by default.")         -->
+                <!--                <optional>true</optional>-->
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+
+    <build>
+        <finalName>com.knight.web 框架搭建</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.6.1</version>
+                <configuration>
+                    <fork>true</fork>
+                    <addResources>true</addResources>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>

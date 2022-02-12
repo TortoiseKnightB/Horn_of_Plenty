@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.knight</groupId>
+        <artifactId>com.knight.web</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+
+    <artifactId>web-gateway</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <description>网关模块</description>
+
+
+    <dependencies>
+        <dependency>
+            <!--     下面的web-test中包含了该web-common，所以这里也可以不引入    -->
+            <groupId>com.knight</groupId>
+            <artifactId>web-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <!--     由于目前没有用到rpc，所以这里手动引入，不然解析component会找不到bean       -->
+            <groupId>com.knight</groupId>
+            <artifactId>web-test</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <!--boot web actuator-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!--一般通用配置-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+
+</project>
