@@ -9,7 +9,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
- * 全局异常统一处理
+ * 异常统一处理 AOP
  *
  * @author TortoiseKnightB
  * @date 2022/02/08
@@ -17,9 +17,8 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Order(1)
 @Component
-public class GlobalExceptionHandlerAspect {
+public class ExceptionHandlerAspect {
 
-    // TODO 待日志功能完成后，与日志合并成，并改成全局生效
     @Pointcut("@annotation(com.knight.webcommon.aspect.annotation.ExceptionHandlerAnnotation)")
     private void pointcut() {
     }

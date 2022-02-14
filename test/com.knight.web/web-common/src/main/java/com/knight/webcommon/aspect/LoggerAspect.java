@@ -1,8 +1,5 @@
 package com.knight.webcommon.aspect;
 
-import cn.hutool.json.JSON;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.knight.gatewaycommon.model.response.ResultInfo;
 import com.knight.gatewaycommon.utils.JsonHelper;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -19,7 +16,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 全局日志记录
+ * 日志记录 AOP
+ * <p>
+ * 此处为基本日志记录模板，没有对 logback 进行封装
  *
  * @author TortoiseKnightB
  * @date 2022/02/10

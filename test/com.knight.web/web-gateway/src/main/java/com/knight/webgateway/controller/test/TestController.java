@@ -119,6 +119,20 @@ public class TestController {
         return new ResultInfo<SchoolParam>().succeed(param);
     }
 
+    /**
+     * 全局异常处理、日志记录 注解测试样例：api/test/TestAspect5
+     *
+     * @param param
+     * @return
+     */
+    @PostMapping("/TestAspect5")
+    @GlobalHandlerAnnotation
+    public ResultInfo<SchoolParam> testAspect5(@RequestBody SchoolParam param) {
+        System.out.println("test");
+        int a = 10 / 0;
+        return new ResultInfo<SchoolParam>().succeed(param);
+    }
+
     // TODO 将测试用例按模块分开
 
     /**
