@@ -1,6 +1,8 @@
-package com.knight.test;
+package com.knight.logback;
 
-import com.knight.test.util.Util;
+import com.knight.logback.util.PlusTest;
+import com.knight.logback.util.Util;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +21,17 @@ class TestApplicationTests {
         log.error("error");
     }
 
+    @DisplayName("测试基础日志功能")
     @Test
-    void contextLoads() {
+    void loggerTest() {
         loginfo();
         Util.loginfo();
+    }
+
+    @DisplayName("测试增强日志功能")
+    @Test
+    void loggerPlusTest() {
+        PlusTest.loggerPlusInfo();
     }
 
 }

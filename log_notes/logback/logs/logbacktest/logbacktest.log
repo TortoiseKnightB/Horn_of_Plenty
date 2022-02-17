@@ -1,6 +1,6 @@
-2022-02-09 19:03:50 [main] INFO  com.knight.test.TestApplicationTests - Starting TestApplicationTests using Java 1.8.0_292 on EM-20210629ZIZB with PID 94116 (started by Administrator in C:\Users\Administrator\Desktop\新建文件夹\Horn_of_Plenty\log_notes\logback)
-2022-02-09 19:03:50 [main] INFO  com.knight.test.TestApplicationTests - The following profiles are active: local
-2022-02-09 19:03:51 [main] INFO  com.knight.test.TestApplicationTests - Started TestApplicationTests in 1.029 seconds (JVM running for 2.517)
-2022-02-09 19:03:51 [main] INFO  com.knight.test.TestApplication - info
-2022-02-09 19:03:51 [main] WARN  com.knight.test.TestApplication - warn
-2022-02-09 19:03:51 [main] ERROR com.knight.test.TestApplication - error
+2022-02-17 15:33:15 [main] INFO  c.k.logback.TestApplicationTests - Starting TestApplicationTests using Java 1.8.0_292 on EM-20210629ZIZB with PID 944732 (started by Administrator in D:\git\git_repository\Log_notes\Horn_of_Plenty\log_notes\logback)
+2022-02-17 15:33:15 [main] INFO  c.k.logback.TestApplicationTests - The following profiles are active: local
+2022-02-17 15:33:16 [main] INFO  c.k.logback.TestApplicationTests - Started TestApplicationTests in 0.925 seconds (JVM running for 1.709)
+2022-02-17 15:33:16 [main] INFO  com.knight.logback.TestApplication - info
+2022-02-17 15:33:16 [main] WARN  com.knight.logback.TestApplication - warn
+2022-02-17 15:33:16 [main] ERROR com.knight.logback.TestApplication - error

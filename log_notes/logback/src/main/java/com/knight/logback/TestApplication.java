@@ -1,4 +1,4 @@
-package com.knight.test;
+package com.knight.logback;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
