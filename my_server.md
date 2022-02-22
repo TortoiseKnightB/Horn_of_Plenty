@@ -325,7 +325,7 @@ sh docker-startup.sh
 
 ------
 
-### Sentinel
+### Sentinel （远程问题）
 
 - 存在问题
 
@@ -389,7 +389,7 @@ cp /root/my_tar/sentinel-dashboard-1.8.0.jar /root/local/sentinel/
 
 ------
 
-### Seata
+### Seata (远程问题)
 
 ##### 在 docker 上安装
 
@@ -558,3 +558,116 @@ docker container logs seata1.4.2
   
   - 问题：目前 seata server 只能在本地运行成功，部署到服务器后，order 向 storage 发送了服务请求，storage 执行了服务，但是无法返回给 order
   - 猜测：外网无法联通本地网络（类似上面的 sentinel），服务。。。好像又不对
+
+------
+
+### Elasticsearch
+
+- 官网链接 https://www.elastic.co/cn/downloads/elasticsearch
+
+##### 创建自定义网络
+
+- 创建自定义的网络(用于连接到连接到同一网络的其他服务(例如Kibana))
+
+```bash
+docker network create elastic
+```
+
+##### 在 docker 上安装
+
+- 以 8.0.0 版本为例，运行命令 
+
+```bash
+docker pull docker.elastic.co/elasticsearch/elasticsearch:8.0.0
+
+docker run --name es01_8.0.0 --net elastic -p 9200:9200 -p 9300:9300 -m 1024M --memory-swap -1 -e "discovery.type=single-node" -it docker.elastic.co/elasticsearch/elasticsearch:8.0.0
+
+#  上面的 docker run 命令中通过 -m 选项限制容器使用的内存上限为 512M
+#  同时设置 memory-swap 值为-1，它表示容器程序使用内存的受限，而可以使用的 swap 空间使用不受限制(宿主机有多少 swap 容器就可以使用多少)
+#  –memory=”300m” –memory-swap=”1g” 的含义为：
+#  容器可以使用 300M 的物理内存，并且可以使用 700M(1G -300M) 的 swap。–memory-swap 居然是容器可以使用的物理内存和可以使用的 swap 之和！
+```
+
+- 启动后直接退出去，重新以 bash 进入
+
+```bash
+docker start es01_8.0.0 
+docker exec -it es01_8.0.0 /bin/bash
+```
+
+- 重置密码(建议跟默认账号设置成一样:elastic)
+
+```bash
+cd /usr/share/elasticsearch/bin
+elasticsearch-reset-password -u elastic -i
+```
+
+- 访问网站 `https://host:9200/`，出现 name、version 等信息则成功
+
+- 重置 Kibana token(有效期只有30分钟)，将生成的 kibana token 记录下来
+
+```bash
+elasticsearch-create-enrollment-token -s kibana
+```
+
+------
+
+### Kibana
+
+##### 在 docker 上安装
+
+- 安装版本应与 elasticsearch 保持一致
+
+```bash
+docker pull docker.elastic.co/kibana/kibana:8.0.0
+
+docker run --name kib-01 --net elastic -p 5601:5601 -m 800M --memory-swap -1 docker.elastic.co/kibana/kibana:8.0.0
+```
+
+- 访问网址 `http://host:5601/`，输入之前生成的 kibana token，Kibana 进程终端会出现 6 位数字验证密码，输入验证码后进入 Kibana 控制台
+
+------
+
+### Logstash
+
+- 程序目前仍在本地跑，先将 logstash 部署在本地机器上
+
+##### 本地安装
+
+- 注意安装版本应和上面一致，为 8.0.0
+- 官网链接 https://www.elastic.co/cn/downloads/logstash
+- 下载链接 https://artifacts.elastic.co/downloads/logstash/logstash-8.0.0-windows-x86_64.zip
+- 安装后解压，进入 config 文件夹下，添加新的配置文件 logstash-test.conf，配置文件内容为：
+
+```bash
+input {
+  tcp {
+    port => 5044
+    type => "test"
+    # 将日志内容解析为 json 格式
+    codec => json_lines
+  }
+}
+
+output {
+  elasticsearch {
+    # txcloud 为自己部署 elasticsearch 的服务器 IP 地址
+    hosts => ["https://txcloud:9200"]
+    index => "logstash-%{type}"
+    user => "elastic"
+    password => "elastic"
+    ssl => true
+    ssl_certificate_verification => false
+  }
+  stdout{
+    # 日志会在本地控制台进行输出
+    codec => rubydebug
+  }
+}
+```
+
+- 进入 bin 文件夹，执行命令 `logstash -f ../config/logstash-test.conf`，启动 logstash（此处为 windows 系统启动，其他应该同理）
+
+- 本地日志通过 tcp 地址 localhost:5044 传到 logstash，再由 logstash 处理后传给 elasticsearch 并存储，最后在 Kibana（http://txcloud:5601） 上进行展示
+
+------
