@@ -126,10 +126,10 @@ public class TestController {
      * @return
      */
     @PostMapping("/TestAspect5")
-    @GlobalHandlerAnnotation
+//    @GlobalHandlerAnnotation
     public ResultInfo<SchoolParam> testAspect5(@RequestBody SchoolParam param) {
         System.out.println("test");
-        int a = 10 / 0;
+//        int a = 10 / 0;
         return new ResultInfo<SchoolParam>().succeed(param);
     }
 

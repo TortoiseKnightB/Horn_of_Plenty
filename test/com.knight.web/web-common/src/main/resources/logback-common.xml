@@ -6,7 +6,10 @@
         <property name="INFO_LOG_NAME" value="${LOG_PATH}/logback_info.log"/>
         <property name="ERROR_LOG_NAME" value="${LOG_PATH}/logback_error.log"/>
         <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度 %msg：日志消息，%n是换行符-->
-        <property name="PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n"/>
+        <!--更多请参考类 ch.qos.logback.classic.PatternLayout-->
+        <property name="PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level {url:%X{url}, params:%X{params}, result:%X{result}, elapsedTime:%X{elapsedTime}, success:%X{success}, serverIp:%X{serverIp}, clientIp:%X{clientIp}} %logger{35} - %msg%n"/>
+        <property name="LOGSTASH_HOST" value="txcloud"/>
+        <property name="LOGSTASH_PORT" value="5044"/>
     </springProfile>
 
     <!-- 控制台输出日志 -->
@@ -79,15 +82,13 @@
         </encoder>
     </appender>
 
-    <!-- TODO 配置logstash -->
-<!--    <appender name="LOG_STASH" class="net.logstash.logback.appender.LogstashSocketAppender">-->
-<!--        <provider class="net.logstash.logback.composite.loggingevent.LoggingEventPatternJsonProvider">-->
-<!--            <pattern></pattern>-->
-<!--        </provider>-->
-<!--        <host></host>-->
-<!--        <port></port>-->
-<!--        <customFields></customFields>-->
-<!--    </appender>-->
+    <!-- logstash配置 TCP 传输 -->
+    <appender name="LOG_STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>${LOGSTASH_HOST}:${LOGSTASH_PORT}</destination>
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"appname":"HoP-test"}</customFields>
+        </encoder>
+    </appender>
 
 
     <springProfile name="local">
@@ -96,6 +97,7 @@
             <appender-ref ref="ALL_LOG"/>
             <appender-ref ref="INFO_LOG"/>
             <appender-ref ref="ERROR_LOG"/>
+            <appender-ref ref="LOG_STASH"/>
         </root>
     </springProfile>
 

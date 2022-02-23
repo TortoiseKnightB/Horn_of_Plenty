@@ -1,14 +1,20 @@
 package com.knight.webcommon.aspect;
 
 import com.knight.gatewaycommon.model.response.ResultInfo;
+import com.knight.gatewaycommon.utils.JsonHelper;
+import com.knight.webcommon.aspect.loggerplus.LoggerPlus;
+import com.knight.webcommon.aspect.loggerplus.LoggerPlusFactory;
+import com.knight.webcommon.model.entity.LogData;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -22,29 +28,51 @@ import org.springframework.stereotype.Component;
 @Component
 public class GlobalHandlerAspect {
 
-    private static Logger logger = LoggerFactory.getLogger(LoggerAspect.class);
+    private static LoggerPlus logger = LoggerPlusFactory.getLoggerPlus(GlobalHandlerAspect.class);
 
-    // TODO 暂时借助 GlobalHandlerAnnotation 测验
-    @Pointcut("@annotation(com.knight.webcommon.aspect.annotation.GlobalHandlerAnnotation)")
+//    @Pointcut("@annotation(com.knight.webcommon.aspect.annotation.GlobalHandlerAnnotation)")
+    @Pointcut("execution(public * com.knight.webgateway.controller..*.*(..))")
     private void pointcut() {
     }
 
     @Around("pointcut()")
     public Object service(ProceedingJoinPoint pjp) {
-        logger.info("GlobalHandlerAspect start");
 
-        Object result;
+        long startTime = System.currentTimeMillis();
+        long elapsedTime;
+        HttpServletRequest request = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest();
+
+        ResultInfo result = null;
         Object[] args = pjp.getArgs();
         try {
-            logger.info("GlobalHandlerAspect proceed");
-            result = pjp.proceed(args);
+            result = (ResultInfo) pjp.proceed(args);
+            elapsedTime = System.currentTimeMillis() - startTime;
+            logger.info(LogData.builder()
+                    .url(request.getRequestURI())
+                    .params(JsonHelper.toJSON(args))
+                    .result(JsonHelper.toJSON(result))
+                    .elapsedTime(elapsedTime)
+                    .success(result.getSuccess())
+                    .serverIp(request.getRequestURI())
+                    .clientIp("locolhost")
+                    .message("GlobalHandlerAspect proceed")
+                    .build());
         } catch (Throwable e) {
-            logger.error("GlobalHandlerAspect exception");
             String message = "系统错误";
+            elapsedTime = System.currentTimeMillis() - startTime;
+            logger.info(LogData.builder()
+                    .url(request.getRequestURI())
+                    .params(JsonHelper.toJSON(args))
+                    .result(JsonHelper.toJSON(result))
+                    .elapsedTime(elapsedTime)
+                    .success(false)
+                    .serverIp(request.getRequestURI())
+                    .clientIp("locolhost")
+                    .message(message)
+                    .build());
             result = new ResultInfo<>().fail(message);
         }
 
-        logger.info("GlobalHandlerAspect end");
         return result;
     }
 
