@@ -630,8 +630,6 @@ docker run --name kib-01 --net elastic -p 5601:5601 -m 800M --memory-swap -1 doc
 
 ### Logstash
 
-- 程序目前仍在本地跑，先将 logstash 部署在本地机器上
-
 ##### 本地安装
 
 - 注意安装版本应和上面一致，为 8.0.0
@@ -669,5 +667,33 @@ output {
 - 进入 bin 文件夹，执行命令 `logstash -f ../config/logstash-test.conf`，启动 logstash（此处为 windows 系统启动，其他应该同理）
 
 - 本地日志通过 tcp 地址 localhost:5044 传到 logstash，再由 logstash 处理后传给 elasticsearch 并存储，最后在 Kibana（http://txcloud:5601） 上进行展示
+
+##### 在 docker 上安装
+
+- 安装版本应与上面保持一致
+
+```bash
+docker pull docker.elastic.co/logstash/logstash:8.0.0
+```
+
+- 创建新的容器实例，并以 bash 命令进入容器内部，对配置文件进行修改
+
+```bash
+docker run --name logstash-01 --net elastic -p 5044:5044 -m 1024M --memory-swap -1 -it docker.elastic.co/logstash/logstash:8.0.0 /bin/bash
+
+# 删除原启动配置
+rm /usr/share/logstash/config/logstash.yml
+
+# logstash.yml 里面内容为空
+docker cp /root/my_tar/logstash.yml logstash-01:/usr/share/logstash/config/
+# logstash-test.conf 里面内容与本地安装的相同
+docker cp /root/my_tar/logstash-test.conf logstash-01:/usr/share/logstash/config/
+```
+
+- 退出容器，以后再启动容器时不会自动执行 logstash 程序，想要启动 logstash 程序只需执行下列下列命令：
+
+```bash
+docker exec -d logstash-01 /usr/share/logstash/bin/logstash -f  /usr/share/logstash/config/logstash-test.conf
+```
 
 ------
