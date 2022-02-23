@@ -7,9 +7,8 @@
 
     <!--  当application.yml指定环境为local时生效  -->
     <springProfile name="local">
-        <!--    Logstash_host 的值去 hosts 文件里找    -->
-        <property name="logstash_host" value="Logstash_host"/>
-        <property name="logstash_port" value="5796"/>
+        <property name="logstash_host" value="txcloud"/>
+        <property name="logstash_port" value="5044"/>
     </springProfile>
 
     <!-- 控制台输出 -->
@@ -63,25 +62,15 @@
         </rollingPolicy>
     </appender>
 
-    <!--logstash配置-->
-    <appender name="LOG_STASH" class="net.logstash.logback.appender.LogstashSocketAppender">
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>INFO</level>
-        </filter>
-        <host>${logstash_host}</host>
-        <port>${logstash_port}</port>
-        <customFields>{"appname":"user-query-demo"}</customFields>
-    </appender>
 
-    <!--  logstash还有一种TCP的传输方式，这里没用成功，有需要自己再去查找资料  -->
     <!--logstash配置 TCP传输-->
-    <!--    <appender name="LOG_STASH_TCP" class="net.logstash.logback.appender.LogstashTcpSocketAppender">-->
-    <!--        <destination>${logstash_host}:${logstash_port}</destination>-->
-    <!--        &lt;!&ndash; encoder必须配置,有多种可选 &ndash;&gt;-->
-    <!--        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">-->
-    <!--            <customFields>{"appname":"user-query-demo"}</customFields>-->
-    <!--        </encoder>-->
-    <!--    </appender>-->
+    <appender name="LOG_STASH_TCP" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>${logstash_host}:${logstash_port}</destination>
+        <!-- encoder必须配置,有多种可选 -->
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"appname":"HoP-log_notes"}</customFields>
+        </encoder>
+    </appender>
 
 
     <!--功能增强日志测试-->
@@ -116,6 +105,7 @@
         <logger name="com.knight.logback.util.PlusTest" level="INFO" additivity="false">
             <appender-ref ref="CONSOLE_PLUS"/>
             <appender-ref ref="PLUS_LOG"/>
+            <appender-ref ref="LOG_STASH_TCP"/>
         </logger>
     </springProfile>
 
@@ -130,7 +120,7 @@
             <!--   将日志输出到控制台     -->
             <appender-ref ref="CONSOLE"/>
             <!--   将日志通过LogStash发送出去，可以在Kibana上查看     -->
-            <!--            <appender-ref ref="LOG_STASH"/>-->
+            <appender-ref ref="LOG_STASH_TCP"/>
         </logger>
     </springProfile>
 

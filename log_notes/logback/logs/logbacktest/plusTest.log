@@ -1,6 +1,6 @@
-15:33:16.266 [main] INFO  {url:url, params:params, result:result, elapsedTime:200, success:true, serverIp:serverIp, clientIp:clientIp} com.knight.logback.util.PlusTest - message
-15:33:16.266 [main] INFO  {url:url, params:params, result:result, elapsedTime:200, success:true, serverIp:serverIp, clientIp:clientIp} com.knight.logback.util.PlusTest - 
-15:33:16.269 [main] ERROR {url:url, params:params, result:result, elapsedTime:200, success:true, serverIp:serverIp, clientIp:clientIp} com.knight.logback.util.PlusTest - message
+09:55:18.333 [main] INFO  {url:url, params:params, result:result, elapsedTime:200, success:true, serverIp:serverIp, clientIp:clientIp} com.knight.logback.util.PlusTest - message
+09:55:18.334 [main] INFO  {url:url, params:params, result:result, elapsedTime:200, success:true, serverIp:serverIp, clientIp:clientIp} com.knight.logback.util.PlusTest - 
+09:55:18.335 [main] ERROR {url:url, params:params, result:result, elapsedTime:200, success:true, serverIp:serverIp, clientIp:clientIp} com.knight.logback.util.PlusTest - message
 java.lang.ArithmeticException: / by zero
 	at com.knight.logback.util.PlusTest.loggerPlusInfo(PlusTest.java:45)
 	at com.knight.logback.TestApplicationTests.loggerPlusTest(TestApplicationTests.java:34)
@@ -71,5 +71,5 @@ java.lang.ArithmeticException: / by zero
 	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:35)
 	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:235)
 	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:54)
-15:33:16.270 [main] ERROR {url:url, params:params, result:result, elapsedTime:200, success:true, serverIp:serverIp, clientIp:clientIp} com.knight.logback.util.PlusTest - message
-15:33:16.270 [main] ERROR {url:url, params:params, result:result, elapsedTime:200, success:true, serverIp:serverIp, clientIp:clientIp} com.knight.logback.util.PlusTest - 
+09:55:18.336 [main] ERROR {url:url, params:params, result:result, elapsedTime:200, success:true, serverIp:serverIp, clientIp:clientIp} com.knight.logback.util.PlusTest - message
+09:55:18.336 [main] ERROR {url:url, params:params, result:result, elapsedTime:200, success:true, serverIp:serverIp, clientIp:clientIp} com.knight.logback.util.PlusTest - 

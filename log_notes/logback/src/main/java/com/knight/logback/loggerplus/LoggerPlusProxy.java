@@ -21,6 +21,5 @@ public class LoggerPlusProxy {
         Class<?>[] interfaces = LoggerPlusImpl.class.getInterfaces();
         LoggerPlusHandler loggerPlusHandler = new LoggerPlusHandler(loggerPlus);
         return (LoggerPlus) Proxy.newProxyInstance(classLoader, interfaces, loggerPlusHandler);
-
     }
 }
