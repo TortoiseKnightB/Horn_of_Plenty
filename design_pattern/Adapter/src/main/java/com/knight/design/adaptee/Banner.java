@@ -1,6 +1,8 @@
-package com.knight.design;
+package com.knight.design.adaptee;
 
 /**
+ * 实际情况，底层实现的接口，被适配的角色
+ *
  * @author TortoiseKnightB
  * @date 2022/07/15
  */

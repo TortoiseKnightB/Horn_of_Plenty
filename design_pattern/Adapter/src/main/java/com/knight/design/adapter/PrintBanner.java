@@ -1,6 +1,11 @@
-package com.knight.design;
+package com.knight.design.adapter;
+
+import com.knight.design.adaptee.Banner;
+import com.knight.design.target.Print;
 
 /**
+ * 变换装置，类适配器，使用继承的适配器
+ *
  * @author TortoiseKnightB
  * @date 2022/07/15
  */
