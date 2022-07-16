@@ -1,7 +1,7 @@
 package com.knight.design.adapter;
 
 import com.knight.design.adaptee.Banner;
-import com.knight.design.target.Print;
+import com.knight.design.tar.Print;
 
 /**
  * 变换装置，类适配器，使用继承的适配器

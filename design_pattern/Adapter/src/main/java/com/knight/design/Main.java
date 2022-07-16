@@ -2,8 +2,8 @@ package com.knight.design;
 
 import com.knight.design.adapter.PrintBanner;
 import com.knight.design.adapter.PrintBanner2;
-import com.knight.design.target.Print;
-import com.knight.design.target.Print2;
+import com.knight.design.tar.Print;
+import com.knight.design.tar.Print2;
 
 /**
  * @author TortoiseKnightB
