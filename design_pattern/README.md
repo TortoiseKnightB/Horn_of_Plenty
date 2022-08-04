@@ -28,3 +28,5 @@
     - 装饰边框与被装饰物的一致性
 13. Visitor 访问者模式
     - 访问数据结构并处理数据
+14. Chain of Responsibility 责任链模式
+    - 推卸责任
