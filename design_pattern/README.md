@@ -30,3 +30,5 @@
     - 访问数据结构并处理数据
 14. Chain of Responsibility 责任链模式
     - 推卸责任
+15. Facade 外观模式
+    - 简单窗口
