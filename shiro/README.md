@@ -1,7 +1,7 @@
 # Shiro
 
 - [官方文档](https://shiro.apache.org/documentation.html)
-- [参考视频]()
+- [【硬核干货】2小时学会Spring Boot整合Shiro-哔哩哔哩](https://b23.tv/pY4xRcY)
 
 ### 基本概念
 
