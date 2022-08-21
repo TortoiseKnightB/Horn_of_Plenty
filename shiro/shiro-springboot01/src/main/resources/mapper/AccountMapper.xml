@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knight.shiro.mapper.AccountMapper">
+
+    <!--  用户实体  -->
+    <resultMap id="AccountMap" type="com.knight.shiro.entity.Account">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="perms" jdbcType="VARCHAR" property="perms"/>
+        <result column="role" jdbcType="VARCHAR" property="role"/>
+    </resultMap>
+
+    <select id="getAccount" resultMap="AccountMap">
+        SELECT *
+        FROM test_db.shiro_user
+        WHERE username = #{username};
+    </select>
+
+
+</mapper>
+
