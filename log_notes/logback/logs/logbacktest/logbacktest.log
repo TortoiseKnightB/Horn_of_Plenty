@@ -1,6 +1,0 @@
-2022-02-23 09:55:17 [main] INFO  c.k.logback.TestApplicationTests - Starting TestApplicationTests using Java 1.8.0_292 on EM-20210629ZIZB with PID 985996 (started by Administrator in D:\git\git_repository\Log_notes\Horn_of_Plenty\log_notes\logback)
-2022-02-23 09:55:17 [main] INFO  c.k.logback.TestApplicationTests - The following profiles are active: local
-2022-02-23 09:55:18 [main] INFO  c.k.logback.TestApplicationTests - Started TestApplicationTests in 0.829 seconds (JVM running for 1.514)
-2022-02-23 09:55:18 [main] INFO  com.knight.logback.TestApplication - info
-2022-02-23 09:55:18 [main] WARN  com.knight.logback.TestApplication - warn
-2022-02-23 09:55:18 [main] ERROR com.knight.logback.TestApplication - error

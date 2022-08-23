@@ -14,7 +14,27 @@ public class PlusTest {
 
     private static final LoggerPlus loggerPlus = LoggerPlusFactory.getLoggerPlus(PlusTest.class);
 
+    /**
+     * 日志打印基础功能
+     */
     public static void loggerPlusInfo() {
+        LogData logData = LogData.builder()
+                .url("url")
+                .params("params")
+                .result("result")
+                .elapsedTime(200L)
+                .success(true)
+                .serverIp("serverIp")
+                .clientIp("clientIp")
+                .message("message")
+                .build();
+        loggerPlus.info(logData);
+    }
+
+    /**
+     * 日志打印扩展功能
+     */
+    public static void loggerPlusInfoExtension() {
 
         LogData logData1 = LogData.builder()
                 .url("url")

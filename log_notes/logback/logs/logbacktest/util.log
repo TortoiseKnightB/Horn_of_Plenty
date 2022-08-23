@@ -1,4 +1,0 @@
-2022-02-23 09:55:18 [main] DEBUG com.knight.logback.util.Util - debug
-2022-02-23 09:55:18 [main] INFO  com.knight.logback.util.Util - info
-2022-02-23 09:55:18 [main] WARN  com.knight.logback.util.Util - warn
-2022-02-23 09:55:18 [main] ERROR com.knight.logback.util.Util - error

@@ -4,6 +4,12 @@
     <property name="LOG_NAME" value="./logs/${APP_NAME}/${APP_NAME}.log"/>
     <property name="UTIL_NAME" value="./logs/${APP_NAME}/util.log"/>
     <property name="PLUS_NAME" value="./logs/${APP_NAME}/plusTest.log"/>
+    <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度，%logger{35}：Logger名称，%msg：日志消息，%n是换行符-->
+    <property name="PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n"/>
+    <!-- MDC在日志中的输出格式：%X{url}等 -->
+    <property name="PATTERN_PLUS"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} %n URL:%X{url} %n PARAMS:%X{params} %n RESULT:%X{result} %n ELAPSED_TIME:%X{elapsedTime} %n SUCCESS:%X{success} %n SERVER_IP:%X{serverIp} %n CLIENT_IP:%X{clientIp} %n- %msg%n"/>
+
 
     <!--  当application.yml指定环境为local时生效  -->
     <springProfile name="local">
@@ -15,8 +21,7 @@
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <!-- 日志输出编码 -->
         <encoder>
-            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度 %msg：日志消息，%n是换行符-->
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n</pattern>
+            <pattern>${PATTERN}</pattern>
             <charset>UTF-8</charset>
         </encoder>
     </appender>
@@ -27,7 +32,7 @@
         <file>${LOG_NAME}</file>
         <encoder>
             <!--指定日志内容格式-->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>${PATTERN}}</pattern>
             <charset>utf8</charset>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
@@ -47,11 +52,10 @@
         <file>${UTIL_NAME}</file>
         <encoder>
             <!--指定日志内容格式-->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>${PATTERN}}</pattern>
             <charset>utf8</charset>
         </encoder>
-        <rollingPolicy
-                class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>${UTIL_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <!--日志最大保存15天-->
             <maxHistory>15</maxHistory>
@@ -76,7 +80,7 @@
     <!--功能增强日志测试-->
     <appender name="CONSOLE_PLUS" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level {url:%X{url}, params:%X{params}, result:%X{result}, elapsedTime:%X{elapsedTime}, success:%X{success}, serverIp:%X{serverIp}, clientIp:%X{clientIp}} %logger{35} - %msg%n</pattern>
+            <pattern>${PATTERN_PLUS}</pattern>
             <charset>UTF-8</charset>
         </encoder>
     </appender>
@@ -86,7 +90,7 @@
         <file>${PLUS_NAME}</file>
         <encoder>
             <!--指定日志内容格式-->
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level {url:%X{url}, params:%X{params}, result:%X{result}, elapsedTime:%X{elapsedTime}, success:%X{success}, serverIp:%X{serverIp}, clientIp:%X{clientIp}} %logger{35} - %msg%n</pattern>
+            <pattern>${PATTERN_PLUS}</pattern>
             <charset>utf8</charset>
         </encoder>
         <rollingPolicy

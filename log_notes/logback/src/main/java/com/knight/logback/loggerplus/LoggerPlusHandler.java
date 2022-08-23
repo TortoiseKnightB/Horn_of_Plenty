@@ -8,6 +8,8 @@ import java.lang.reflect.Method;
 
 /**
  * 自定义功能增强日志处理类
+ * <p>
+ * 在{@link #invoke(Object, Method, Object[]) invoke}方法中实现自定义功能增强
  *
  * @author TortoiseKnightB
  * @date 2022/02/16
@@ -27,6 +29,7 @@ public class LoggerPlusHandler implements InvocationHandler {
         LogData logData = (LogData) args[0];
 
         if (annotation != null) {
+            // MDC在日志中的输出格式：%X{url}
             MDC.put(LoggerPlusConstants.URL, logData.getUrl());
             MDC.put(LoggerPlusConstants.PARAMS, logData.getParams());
             MDC.put(LoggerPlusConstants.RESULT, logData.getResult());

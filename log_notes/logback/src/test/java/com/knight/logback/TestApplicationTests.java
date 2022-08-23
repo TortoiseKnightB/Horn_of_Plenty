@@ -11,9 +11,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class TestApplicationTests {
 
-    private static final Logger log = LoggerFactory.getLogger(TestApplication.class);
+    private static final Logger log = LoggerFactory.getLogger("slf4j原生日志");
 
-    private static void loginfo() {
+    @DisplayName("测试原生日志功能")
+    @Test
+    void loginfo() {
         log.trace("trace");
         log.debug("debug");
         log.info("info");
@@ -24,14 +26,14 @@ class TestApplicationTests {
     @DisplayName("测试基础日志功能")
     @Test
     void loggerTest() {
-        loginfo();
         Util.loginfo();
     }
 
     @DisplayName("测试增强日志功能")
     @Test
     void loggerPlusTest() {
-        PlusTest.loggerPlusInfo();
+//        PlusTest.loggerPlusInfo();
+        PlusTest.loggerPlusInfoExtension();
     }
 
 }

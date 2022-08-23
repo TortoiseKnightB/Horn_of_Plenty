@@ -7,6 +7,7 @@ import java.lang.annotation.*;
  *
  * @author TortoiseKnightB
  * @date 2022/02/16
+ * @see LoggerPlusHandler
  */
 @Documented
 @Target({ElementType.METHOD})
