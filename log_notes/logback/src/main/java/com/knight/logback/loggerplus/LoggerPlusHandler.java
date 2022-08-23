@@ -37,8 +37,8 @@ public class LoggerPlusHandler implements InvocationHandler {
             MDC.put(LoggerPlusConstants.SUCCESS, String.valueOf(logData.getSuccess()));
             MDC.put(LoggerPlusConstants.SERVER_IP, logData.getServerIp());
             MDC.put(LoggerPlusConstants.CLIENT_IP, logData.getClientIp());
-            MDC.put("httpMethod", logData.getHttpMethod());
-            MDC.put("classMethod", logData.getClassMethod());
+            MDC.put(LoggerPlusConstants.HTTP_METHOD, logData.getHttpMethod());
+            MDC.put(LoggerPlusConstants.CLASS_METHOD, logData.getClassMethod());
         }
 
         Object result = method.invoke(loggerPlus, args);
@@ -51,8 +51,8 @@ public class LoggerPlusHandler implements InvocationHandler {
             MDC.remove(LoggerPlusConstants.SUCCESS);
             MDC.remove(LoggerPlusConstants.SERVER_IP);
             MDC.remove(LoggerPlusConstants.CLIENT_IP);
-            MDC.remove("httpMethod");
-            MDC.remove("classMethod");
+            MDC.remove(LoggerPlusConstants.HTTP_METHOD);
+            MDC.remove(LoggerPlusConstants.CLASS_METHOD);
         }
 
         return result;

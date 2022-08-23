@@ -12,9 +12,10 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 
 /**
+ * 全局日志记录，MDC的使用放在了{@link com.knight.logback.loggerplus.LoggerPlusHandler LoggerPlusHandler}
+ *
  * @author TortoiseKnightB
  * @date 2022/08/23
  */
@@ -38,12 +39,13 @@ public class GlobalLoggerAspect {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
 
+        // 这个好像没啥用，不如直接用MDC
         LogData logData = LogData.builder()
                 .url(request.getRequestURL().toString())
-                .params(Arrays.toString(args))
+                .params(args.toString())
                 .serverIp("serverIp")
                 .clientIp(request.getRemoteAddr())
-                .classMethod(pjp.getSignature().getDeclaringTypeName() + "#" + pjp.getSignature().getName())
+                .classMethod(pjp.getSignature().getDeclaringTypeName() + "." + pjp.getSignature().getName())
                 .httpMethod(request.getMethod())
                 .build();
 

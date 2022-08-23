@@ -1,5 +1,7 @@
 package com.knight.logback.consts;
 
+import org.slf4j.MDC;
+
 /**
  * 功能增强日志常量
  *
@@ -22,5 +24,8 @@ public class LoggerPlusConstants {
 
     public static final String CLIENT_IP = "clientIp";
 
+    public static final String CLASS_METHOD = "classMethod";
+
+    public static final String HTTP_METHOD = "httpMethod";
 
 }
