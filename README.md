@@ -9,3 +9,8 @@
 - leetcode 刷题测试
 - web 前后端分离框架：vue + spring boot 整合 mybatis 测试
 - web/web-vue3:  新增 vue3.0 的演示案例，并引入 arco-design
+
+### LOG_NOTES
+
+- logback：日志框架的一些常用实现，根据自身需要选择改进
+- 目前包含：ELK的整合、全局日志类思路、自定义增强日志类
