@@ -33,4 +33,8 @@ public class LogData {
 
     private Throwable exception;
 
+    private String httpMethod;
+
+    private String classMethod;
+
 }

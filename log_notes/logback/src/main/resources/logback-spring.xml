@@ -8,8 +8,7 @@
     <property name="PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n"/>
     <!-- MDC在日志中的输出格式：%X{url}等 -->
     <property name="PATTERN_PLUS"
-              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} %n URL:%X{url} %n PARAMS:%X{params} %n RESULT:%X{result} %n ELAPSED_TIME:%X{elapsedTime} %n SUCCESS:%X{success} %n SERVER_IP:%X{serverIp} %n CLIENT_IP:%X{clientIp} %n- %msg%n"/>
-
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} %n URL:%X{url} %n PARAMS:%X{params} %n RESULT:%X{result} %n ELAPSED_TIME:%X{elapsedTime} %n SUCCESS:%X{success} %n SERVER_IP:%X{serverIp} %n CLIENT_IP:%X{clientIp} %n HTTP_METHOD:%X{httpMethod} %n CLASS_METHOD:%X{classMethod} %n- %msg%n"/>
 
     <!--  当application.yml指定环境为local时生效  -->
     <springProfile name="local">
@@ -104,6 +103,14 @@
             <totalSizeCap>10GB</totalSizeCap>
         </rollingPolicy>
     </appender>
+
+    <!-- 全局日志的配置 -->
+    <springProfile name="local">
+        <logger name="com.knight.logback.aspect.GlobalLoggerAspect" level="INFO" additivity="false">
+            <appender-ref ref="CONSOLE_PLUS"/>
+            <appender-ref ref="PLUS_LOG"/>
+        </logger>
+    </springProfile>
 
     <springProfile name="local">
         <logger name="com.knight.logback.util.PlusTest" level="INFO" additivity="false">
