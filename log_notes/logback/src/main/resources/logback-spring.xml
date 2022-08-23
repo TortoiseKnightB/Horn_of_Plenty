@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="APP_NAME" value="logbacktest"/>
+    <property name="LOG_NAME" value="./logs/${APP_NAME}/${APP_NAME}.log"/>
+    <property name="UTIL_NAME" value="./logs/${APP_NAME}/util.log"/>
+    <property name="PLUS_NAME" value="./logs/${APP_NAME}/plusTest.log"/>
+    <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度，%logger{35}：Logger名称，%msg：日志消息，%n是换行符-->
+    <property name="PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n"/>
+    <!-- MDC在日志中的输出格式：%X{url}等 -->
+    <property name="PATTERN_PLUS"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} %n URL:%X{url} %n PARAMS:%X{params} %n RESULT:%X{result} %n ELAPSED_TIME:%X{elapsedTime} %n SUCCESS:%X{success} %n SERVER_IP:%X{serverIp} %n CLIENT_IP:%X{clientIp} %n HTTP_METHOD:%X{httpMethod} %n CLASS_METHOD:%X{classMethod} %n- %msg%n"/>
+
+    <!--  当application.yml指定环境为local时生效  -->
+    <springProfile name="local">
+        <property name="logstash_host" value="txcloud"/>
+        <property name="logstash_port" value="5044"/>
+    </springProfile>
+
+    <!-- 控制台输出 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 日志输出编码 -->
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--  将日志记录到指定文件  -->
+    <appender name="APP_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--指定日志文件名称-->
+        <file>${LOG_NAME}</file>
+        <encoder>
+            <!--指定日志内容格式-->
+            <pattern>${PATTERN}}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--设置日志命名模式-->
+            <fileNamePattern>${LOG_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!--日志最大保存15天-->
+            <maxHistory>15</maxHistory>
+            <!--日志最大的文件大小-->
+            <maxFileSize>100MB</maxFileSize>
+            <!--日志最大保存10GB-->
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="UTIL_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--指定日志文件名称-->
+        <file>${UTIL_NAME}</file>
+        <encoder>
+            <!--指定日志内容格式-->
+            <pattern>${PATTERN}}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${UTIL_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!--日志最大保存15天-->
+            <maxHistory>15</maxHistory>
+            <!--日志最大的文件大小-->
+            <maxFileSize>100MB</maxFileSize>
+            <!--日志最大保存10GB-->
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+
+    <!--logstash配置 TCP传输-->
+    <appender name="LOG_STASH_TCP" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>${logstash_host}:${logstash_port}</destination>
+        <!-- encoder必须配置,有多种可选 -->
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"appname":"HoP-log_notes"}</customFields>
+        </encoder>
+    </appender>
+
+
+    <!--功能增强日志测试-->
+    <appender name="CONSOLE_PLUS" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${PATTERN_PLUS}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="PLUS_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--指定日志文件名称-->
+        <file>${PLUS_NAME}</file>
+        <encoder>
+            <!--指定日志内容格式-->
+            <pattern>${PATTERN_PLUS}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${PLUS_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!--日志最大保存15天-->
+            <maxHistory>15</maxHistory>
+            <!--日志最大的文件大小-->
+            <maxFileSize>100MB</maxFileSize>
+            <!--日志最大保存10GB-->
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 全局日志的配置 -->
+    <springProfile name="local">
+        <logger name="com.knight.logback.aspect.GlobalLoggerAspect" level="INFO" additivity="false">
+            <appender-ref ref="CONSOLE_PLUS"/>
+            <appender-ref ref="PLUS_LOG"/>
+        </logger>
+    </springProfile>
+
+    <springProfile name="local">
+        <logger name="com.knight.logback.util.PlusTest" level="INFO" additivity="false">
+            <appender-ref ref="CONSOLE_PLUS"/>
+            <appender-ref ref="PLUS_LOG"/>
+            <appender-ref ref="LOG_STASH_TCP"/>
+        </logger>
+    </springProfile>
+
+
+    <springProfile name="local">
+        <!--com.test.util目录下的文件产生的日志全部记录到util.log，不再走root路径-->
+        <!--默认的日志级别是DEBUG-->
+        <!--additivity=false表示如果能匹配到这条规则就不用往上继续查找到root节点去-->
+        <logger name="com.knight.logback.util" level="DEBUG" additivity="false">
+            <!--   将日志记录到UTIL_LOG     -->
+            <appender-ref ref="UTIL_LOG"/>
+            <!--   将日志输出到控制台     -->
+            <appender-ref ref="CONSOLE"/>
+            <!--   将日志通过LogStash发送出去，可以在Kibana上查看     -->
+            <appender-ref ref="LOG_STASH_TCP"/>
+        </logger>
+    </springProfile>
+
+    <springProfile name="local">
+        <!--  所有日志默认走这条路径，除非被logger筛选出去  -->
+        <root level="INFO">
+            <!--ref表示具体的appender name-->
+            <!--   将日志输出到控制台     -->
+            <appender-ref ref="CONSOLE"/>
+            <!--   将日志记录到APP_LOG     -->
+            <appender-ref ref="APP_LOG"/>
+        </root>
+    </springProfile>
+
+</configuration>
