@@ -15,10 +15,11 @@ import lombok.Data;
 @Data
 public class TestParam {
 
-    @ApiModelProperty(value = "数据编号")
+    @ApiModelProperty(value = "数据编号", required = true)
     @JsonProperty("Id")
     @NotBlank(message = "Id 不能为空")
     private String id;
+
 
     @ApiModelProperty(value = "消息内容")
     @JsonProperty("Message")

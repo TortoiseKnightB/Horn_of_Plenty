@@ -1,6 +1,5 @@
 package com.knight.webcommon.model.entity;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,17 +19,14 @@ public class TestEntityDTO {
     /**
      * 主键id
      */
-    @ApiModelProperty("主键id")
     private Long id;
     /**
      * 测试编号
      */
-    @ApiModelProperty("测试编号")
     private String testId;
     /**
      * 数据消息
      */
-    @ApiModelProperty("数据消息")
     private String message;
 
 
