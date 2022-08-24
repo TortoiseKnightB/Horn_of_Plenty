@@ -1,7 +1,9 @@
 package com.knight.web.service.impl;
 
 import com.knight.web.dao.UserMapper;
+import com.knight.web.exception.CommonException;
 import com.knight.web.model.entity.UserInfoDO;
+import com.knight.web.model.enums.EnumCommonException;
 import com.knight.web.model.param.UserInfoParam;
 import com.knight.web.model.response.UserInfoVO;
 import com.knight.web.service.UserService;
@@ -29,8 +31,7 @@ public class UserServiceImpl implements UserService {
     public UserInfoVO getUserInfo(UserInfoParam param) {
         UserInfoDO userInfoDO = userMapper.getUserInfo(param.getName());
         if (userInfoDO == null) {
-            System.out.println("查询失败");
-            return null;
+            throw new CommonException(EnumCommonException.DB_RESULT_ERROR, "查询用户不存在");
         }
         return ObjectBuildHelper.buildUserInfoVO(userInfoDO);
     }
