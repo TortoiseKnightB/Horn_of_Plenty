@@ -1,6 +1,7 @@
 package com.knight.gatewaycommon.model.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.knight.gatewaycommon.model.enums.EnumCommonException;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -23,7 +24,7 @@ public class ResultInfo<T> {
     @JsonProperty("Success")
     private Boolean success;
 
-    @ApiModelProperty("请求结果状态码 0：成功")
+    @ApiModelProperty("请求结果状态码 200：成功")
     @JsonProperty("Code")
     private Integer code;
 
@@ -40,8 +41,19 @@ public class ResultInfo<T> {
     public ResultInfo<T> succeed(T data) {
         this.data = data;
         this.success = true;
-        // TODO 这里 code 以后用 枚举类 实现
-        this.code = 0;
+        this.code = EnumCommonException.SUCCESS.getErrorCode();
+        return this;
+    }
+
+    /**
+     * 默认错误返回结果
+     *
+     * @return
+     */
+    public ResultInfo<T> fail() {
+        this.success = false;
+        this.code = EnumCommonException.SYSTEM_INTERNAL_ANOMALY.getErrorCode();
+        this.message = EnumCommonException.SYSTEM_INTERNAL_ANOMALY.getMessage();
         return this;
     }
 
@@ -53,11 +65,15 @@ public class ResultInfo<T> {
      */
     public ResultInfo<T> fail(String message) {
         this.success = false;
-        // TODO 这里为默认错误 code
-        this.code = 1000;
+        this.code = EnumCommonException.SYSTEM_INTERNAL_ANOMALY.getErrorCode();
         this.message = message;
         return this;
     }
 
-    // TODO 还有其他很多返回情况，比如根据 code 返回结果
+    public ResultInfo<T> fail(Integer errorCode, String message) {
+        this.success = false;
+        this.code = errorCode;
+        this.message = message;
+        return this;
+    }
 }

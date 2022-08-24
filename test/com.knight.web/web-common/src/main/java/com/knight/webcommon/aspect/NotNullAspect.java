@@ -16,9 +16,11 @@ import java.lang.reflect.Field;
  *
  * @author TortoiseKnightB
  * @date 2022/02/08
+ * @see NotBlank
+ * @see NotNullAnnotation
  */
 @Aspect
-@Order(3)
+@Order(4)
 @Component
 public class NotNullAspect {
 
