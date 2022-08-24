@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 /**
+ * 数据库实体类DO
+ *
  * @author TortoiseKnightB
  * @date 2022/08/24
  */

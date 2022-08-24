@@ -9,9 +9,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
+ * 返回实体类V
+ *
  * @author TortoiseKnightB
  * @date 2022/08/24
  */
