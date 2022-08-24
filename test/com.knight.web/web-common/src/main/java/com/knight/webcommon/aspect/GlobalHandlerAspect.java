@@ -1,5 +1,6 @@
 package com.knight.webcommon.aspect;
 
+import com.knight.gatewaycommon.exception.CommonException;
 import com.knight.gatewaycommon.model.response.ResultInfo;
 import com.knight.gatewaycommon.utils.JsonHelper;
 import com.knight.webcommon.aspect.loggerplus.LoggerPlus;
@@ -30,7 +31,7 @@ public class GlobalHandlerAspect {
 
     private static LoggerPlus logger = LoggerPlusFactory.getLoggerPlus(GlobalHandlerAspect.class);
 
-//    @Pointcut("@annotation(com.knight.webcommon.aspect.annotation.GlobalHandlerAnnotation)")
+    //    @Pointcut("@annotation(com.knight.webcommon.aspect.annotation.GlobalHandlerAnnotation)")
     @Pointcut("execution(public * com.knight.webgateway.controller..*.*(..))")
     private void pointcut() {
     }
@@ -40,10 +41,12 @@ public class GlobalHandlerAspect {
 
         long startTime = System.currentTimeMillis();
         long elapsedTime;
-        HttpServletRequest request = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest();
 
         ResultInfo result = null;
         Object[] args = pjp.getArgs();
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+
         try {
             result = (ResultInfo) pjp.proceed(args);
             elapsedTime = System.currentTimeMillis() - startTime;
@@ -57,8 +60,8 @@ public class GlobalHandlerAspect {
                     .clientIp("locolhost")
                     .message("GlobalHandlerAspect proceed")
                     .build());
-        } catch (Throwable e) {
-            String message = "系统错误";
+        } catch (CommonException e) {
+            result = new ResultInfo<>().fail(e.getErrorCode(), e.getMessage());
             elapsedTime = System.currentTimeMillis() - startTime;
             logger.info(LogData.builder()
                     .url(request.getRequestURI())
@@ -68,9 +71,21 @@ public class GlobalHandlerAspect {
                     .success(false)
                     .serverIp(request.getRequestURI())
                     .clientIp("locolhost")
-                    .message(message)
+                    .message(e.getMessage())
                     .build());
-            result = new ResultInfo<>().fail(message);
+        } catch (Throwable e) {
+            result = new ResultInfo<>().fail(e.getMessage());
+            elapsedTime = System.currentTimeMillis() - startTime;
+            logger.info(LogData.builder()
+                    .url(request.getRequestURI())
+                    .params(JsonHelper.toJSON(args))
+                    .result(JsonHelper.toJSON(result))
+                    .elapsedTime(elapsedTime)
+                    .success(false)
+                    .serverIp(request.getRequestURI())
+                    .clientIp("locolhost")
+                    .message(e.getMessage())
+                    .build());
         }
 
         return result;

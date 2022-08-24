@@ -1,5 +1,6 @@
 package com.knight.webcommon.model.param;
 
+import com.knight.webcommon.aspect.annotation.NonBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,5 +19,6 @@ public class BaseParam {
 //    @JSONField(name = "")
 //    @JsonProperty(value = "CustomerNo")
 //    @NotBlank()
+    @NonBlank
     private String id;
 }

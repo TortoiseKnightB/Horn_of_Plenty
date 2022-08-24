@@ -47,11 +47,11 @@ public class CommonException extends RuntimeException {
         this.codeMessage = exception.getCodeMessage();
     }
 
-    public CommonException(EnumCommonException exception, String codeMessage) {
+    public CommonException(EnumCommonException exception, String message) {
         super(exception.getCodeMessage());
         this.errorCode = exception.getErrorCode();
-        this.message = exception.getMessage();
-        this.codeMessage = codeMessage;
+        this.message = message;
+        this.codeMessage = exception.getCodeMessage();
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.knight.gatewaycommon.utils.JsonHelper;
 import com.knight.webcommon.aspect.annotation.*;
 import com.knight.webgateway.model.param.DateParam;
 import com.knight.webgateway.model.param.SchoolParam;
+import com.knight.webgateway.model.param.TestAspect6Param;
 import com.knight.webgateway.model.param.TestParam;
 import com.knight.webgateway.model.response.vo.TestEntityVO;
 import com.knight.webgateway.service.test.TestService;
@@ -131,6 +132,17 @@ public class TestController {
         System.out.println("test");
 //        int a = 10 / 0;
         return new ResultInfo<SchoolParam>().succeed(param);
+    }
+
+    /**
+     * NullCheckAspect 注解测试样例：api/test/TestAspect6
+     *
+     * @return 注意观察参数为空时的输出信息
+     */
+    @PostMapping(value = "/TestAspect6")
+    public ResultInfo<String> testAspect6(@RequestBody TestAspect6Param param) {
+        System.out.println(param);
+        return new ResultInfo<String>().succeed("test @NonBlank");
     }
 
     // TODO 将测试用例按模块分开
