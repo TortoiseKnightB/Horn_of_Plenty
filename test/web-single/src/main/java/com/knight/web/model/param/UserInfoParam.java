@@ -1,5 +1,6 @@
 package com.knight.web.model.param;
 
+import com.knight.web.annotation.NotBlank;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserInfoParam extends BaseRequestParam {
 
+    @NotBlank("name不能为空")
     @ApiModelProperty(value = "用户名称", required = true)
     private String name;
 }
