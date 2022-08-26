@@ -23,6 +23,7 @@ public class UserController {
 
     /**
      * http://127.0.0.1:8080/user
+     *
      * @return
      */
     @GetMapping
@@ -35,5 +36,6 @@ public class UserController {
     public ResultInfo<UserInfoVO> getUserInfo(@RequestBody UserInfoParam param) {
         return new ResultInfo<UserInfoVO>().succeed(userService.getUserInfo(param));
     }
+
 
 }

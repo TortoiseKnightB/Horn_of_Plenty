@@ -2,13 +2,14 @@
 <configuration>
     <property name="APP_NAME" value="web-single"/>
     <property name="INFO_NAME" value="./logs/${APP_NAME}/info.log"/>
+    <property name="WARN_NAME" value="./logs/${APP_NAME}/warn.log"/>
     <property name="ERROR_NAME" value="./logs/${APP_NAME}/error.log"/>
-    <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度，%logger{35}：Logger名称，%msg：日志消息，%n是换行符-->
-    <!-- MDC在日志中的输出格式：%X{url}等 -->
-    <property name="PATTERN"
-              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} %n URL:%X{url} %n PARAMS:%X{params} %n RESULT:%X{result} %n ELAPSED_TIME:%X{elapsedTime} %n SUCCESS:%X{success} %n SERVER_IP:%X{serverIp} %n CLIENT_IP:%X{clientIp} %n HTTP_METHOD:%X{httpMethod} %n CLASS_METHOD:%X{classMethod} %n- %msg%n"/>
+    <!-- 系统内部日志格式 -->
+    <property name="PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n"/>
+    <!-- 外部请求日志格式 -->
+    <property name="PATTERN_CONTROLLER"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} %n HTTP_METHOD:%X{httpMethod} %n SERVER_IP:%X{serverIp} %n CLIENT_IP:%X{clientIp} %n URL:%X{url} %n CLASS_METHOD:%X{classMethod} %n PARAMS:%X{params} %n%msg%n%n"/>
 
-    <!--  当application.yml指定环境为local时生效  -->
     <springProfile name="local">
         <property name="logstash_host" value="txcloud"/>
         <property name="logstash_port" value="5044"/>
@@ -22,16 +23,16 @@
         </encoder>
     </appender>
 
-
     <appender name="INFO_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${INFO_NAME}</file>
         <encoder>
             <pattern>${PATTERN}}</pattern>
             <charset>utf8</charset>
         </encoder>
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <!-- 过滤掉TRACE和DEBUG级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!--设置日志命名模式-->
@@ -45,6 +46,24 @@
         </rollingPolicy>
     </appender>
 
+    <appender name="WARN_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${WARN_NAME}</file>
+        <encoder>
+            <pattern>${PATTERN}}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${WARN_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <maxFileSize>20MB</maxFileSize>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
 
     <appender name="ERROR_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${ERROR_NAME}</file>
@@ -52,11 +71,12 @@
             <pattern>${PATTERN}}</pattern>
             <charset>utf8</charset>
         </encoder>
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <!--设置日志命名模式-->
             <fileNamePattern>${ERROR_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxHistory>30</maxHistory>
             <maxFileSize>20MB</maxFileSize>
@@ -65,7 +85,15 @@
     </appender>
 
 
-    <!--logstash配置 TCP传输-->
+    <appender name="CONSOLE_CONTROLLER" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${PATTERN_CONTROLLER}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+
+    <!-- logstash配置 TCP传输 -->
     <appender name="LOG_STASH_TCP" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
         <destination>${logstash_host}:${logstash_port}</destination>
         <!-- encoder必须配置,有多种可选 -->
@@ -74,12 +102,22 @@
         </encoder>
     </appender>
 
+    <!-- 外部请求日志记录 -->
+    <springProfile name="local">
+        <!-- name实际就是根据生成logger时传入的名字（%logger）进行匹配 -->
+        <logger name="com.knight.web.utils.logger.LoggerHelper" level="INFO" additivity="false">
+            <appender-ref ref="CONSOLE_CONTROLLER"/>
+        </logger>
+    </springProfile>
+
+
     <springProfile name="local">
         <!--  所有日志默认走这条路径，除非被logger筛选出去  -->
-        <root>
-<!--            <appender-ref ref="CONSOLE"/>-->
-<!--            <appender-ref ref="INFO_LOG"/>-->
-<!--            <appender-ref ref="ERROR_LOG"/>-->
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="INFO_LOG"/>
+            <appender-ref ref="WARN_LOG"/>
+            <appender-ref ref="ERROR_LOG"/>
         </root>
     </springProfile>
 
