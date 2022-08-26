@@ -87,7 +87,7 @@ public class LoggerHelper {
         if (logData.getException() != null) {
             str.append(" EXCEPTION: ").append(logData.getException()).append("\n");
         }
-        return str.substring(0, str.length() - 2);
+        return str.substring(0, str.length() - 1);
     }
 
 

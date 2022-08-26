@@ -13,8 +13,14 @@ public class LogConstant {
 
     public static final String HTTP_METHOD = "httpMethod";
 
+    /**
+     * 服务器本机Ip地址
+     */
     public static final String SERVER_IP = "serverIp";
 
+    /**
+     * 用户客户端Ip地址
+     */
     public static final String CLIENT_IP = "clientIp";
 
     public static final String URL = "url";

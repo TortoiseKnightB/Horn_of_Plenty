@@ -4,10 +4,12 @@
     <property name="INFO_NAME" value="./logs/${APP_NAME}/info.log"/>
     <property name="WARN_NAME" value="./logs/${APP_NAME}/warn.log"/>
     <property name="ERROR_NAME" value="./logs/${APP_NAME}/error.log"/>
+    <property name="API_INFO_NAME" value="./logs/${APP_NAME}/api/api_info.log"/>
+    <property name="API_ERROR_NAME" value="./logs/${APP_NAME}/api/api_error.log"/>
     <!-- 系统内部日志格式 -->
     <property name="PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n"/>
     <!-- 外部请求日志格式 -->
-    <property name="PATTERN_CONTROLLER"
+    <property name="PATTERN_API"
               value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} %n HTTP_METHOD:%X{httpMethod} %n SERVER_IP:%X{serverIp} %n CLIENT_IP:%X{clientIp} %n URL:%X{url} %n CLASS_METHOD:%X{classMethod} %n PARAMS:%X{params} %n%msg%n%n"/>
 
     <springProfile name="local">
@@ -16,6 +18,7 @@
     </springProfile>
 
 
+    <!-- 内部日志输出配置 -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>${PATTERN}</pattern>
@@ -84,14 +87,55 @@
         </rollingPolicy>
     </appender>
 
-
-    <appender name="CONSOLE_CONTROLLER" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- 外部请求日志输出配置 -->
+    <appender name="CONSOLE_API" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>${PATTERN_CONTROLLER}</pattern>
+            <pattern>${PATTERN_API}</pattern>
             <charset>UTF-8</charset>
         </encoder>
     </appender>
 
+    <appender name="API_INFO_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${API_INFO_NAME}</file>
+        <encoder>
+            <pattern>${PATTERN_API}}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--设置日志命名模式-->
+            <fileNamePattern>${API_INFO_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!--日志最大保存15天-->
+            <maxHistory>15</maxHistory>
+            <!--日志最大的文件大小-->
+            <maxFileSize>100MB</maxFileSize>
+            <!--日志最大保存10GB-->
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="API_ERROR_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${API_ERROR_NAME}</file>
+        <encoder>
+            <pattern>${PATTERN_API}}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--设置日志命名模式-->
+            <fileNamePattern>${API_ERROR_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!--日志最大保存15天-->
+            <maxHistory>15</maxHistory>
+            <!--日志最大的文件大小-->
+            <maxFileSize>100MB</maxFileSize>
+            <!--日志最大保存10GB-->
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
 
     <!-- logstash配置 TCP传输 -->
     <appender name="LOG_STASH_TCP" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
@@ -106,7 +150,9 @@
     <springProfile name="local">
         <!-- name实际就是根据生成logger时传入的名字（%logger）进行匹配 -->
         <logger name="com.knight.web.utils.logger.LoggerHelper" level="INFO" additivity="false">
-            <appender-ref ref="CONSOLE_CONTROLLER"/>
+            <appender-ref ref="CONSOLE_API"/>
+            <appender-ref ref="API_INFO_LOG"/>
+            <appender-ref ref="API_ERROR_LOG"/>
         </logger>
     </springProfile>
 

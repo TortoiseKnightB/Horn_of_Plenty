@@ -1,7 +1,7 @@
 package com.knight.web.aspect;
 
-import cn.hutool.core.text.StrFormatter;
 import cn.hutool.core.util.StrUtil;
+import com.knight.web.consts.CommonConstant;
 import com.knight.web.consts.LogConstant;
 import com.knight.web.exception.CommonException;
 import com.knight.web.model.response.ResultInfo;
@@ -50,7 +50,7 @@ public class GlobalHandlerAspect {
         HttpServletRequest request = attributes.getRequest();
 
         MDC.put(LogConstant.HTTP_METHOD, request.getMethod());
-        MDC.put(LogConstant.SERVER_IP, "serverIp");
+        MDC.put(LogConstant.SERVER_IP, CommonConstant.LOCALHOST);
         MDC.put(LogConstant.CLIENT_IP, request.getRemoteAddr());
         MDC.put(LogConstant.URL, request.getRequestURI());
         MDC.put(LogConstant.CLASS_METHOD, StrUtil.format("{}.{}", pjp.getSignature().getDeclaringTypeName(), pjp.getSignature().getName()));
