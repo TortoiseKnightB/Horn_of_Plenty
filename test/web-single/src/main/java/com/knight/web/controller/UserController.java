@@ -1,6 +1,8 @@
 package com.knight.web.controller;
 
+import com.knight.web.model.param.UserInfoListParam;
 import com.knight.web.model.param.UserInfoParam;
+import com.knight.web.model.response.PageBean;
 import com.knight.web.model.response.ResultInfo;
 import com.knight.web.model.response.UserInfoVO;
 import com.knight.web.service.UserService;
@@ -35,6 +37,12 @@ public class UserController {
     @PostMapping("/getUserInfo")
     public ResultInfo<UserInfoVO> getUserInfo(@RequestBody UserInfoParam param) {
         return new ResultInfo<UserInfoVO>().succeed(userService.getUserInfo(param));
+    }
+
+    @ApiOperation(value = "分页查询用户信息列表")
+    @PostMapping("/getUserInfoList")
+    public ResultInfo<PageBean<UserInfoVO>> getUserInfoList(@RequestBody UserInfoListParam param) {
+        return new ResultInfo<PageBean<UserInfoVO>>().succeed(userService.getUserInfoList(param));
     }
 
 

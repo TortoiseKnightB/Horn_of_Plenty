@@ -18,6 +18,18 @@
         where name = #{name}
     </select>
 
+    <select id="getUserInfoList" resultMap="UserInfoMap">
+        select *
+        from userInfo
+    </select>
+
+    <insert id="insertUserInfoList">
+        INSERT INTO userInfo (`name`, `password`)
+        VALUES
+        <foreach collection="userInfoDOList" item="userInfo" separator=",">
+            (#{userInfo.name},#{userInfo.password})
+        </foreach>
+    </insert>
 
 </mapper>
 

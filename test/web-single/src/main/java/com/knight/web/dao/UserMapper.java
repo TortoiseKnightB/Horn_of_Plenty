@@ -4,6 +4,8 @@ import com.knight.web.model.entity.UserInfoDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * @author TortoiseKnightB
  * @date 2022/08/24
@@ -12,4 +14,8 @@ import org.apache.ibatis.annotations.Param;
 public interface UserMapper {
 
     UserInfoDO getUserInfo(@Param("name") String name);
+
+    List<UserInfoDO> getUserInfoList();
+
+    void insertUserInfoList(@Param("userInfoDOList") List<UserInfoDO> userInfoDOList);
 }

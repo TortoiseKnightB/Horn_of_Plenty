@@ -9,7 +9,7 @@
 - 全局异常、全局日志处理：GlobalHandlerAspect
 - 非空参数校验：NullCheckAspect、NotBlank
 - 本地缓存：
-- 分页：
+- 分页：PageParam、PageBean、PageUtil
 - 普罗米修斯：
 - httpclient：
 - Redis：

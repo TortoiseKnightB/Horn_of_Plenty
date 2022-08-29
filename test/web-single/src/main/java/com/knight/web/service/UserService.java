@@ -1,6 +1,8 @@
 package com.knight.web.service;
 
+import com.knight.web.model.param.UserInfoListParam;
 import com.knight.web.model.param.UserInfoParam;
+import com.knight.web.model.response.PageBean;
 import com.knight.web.model.response.UserInfoVO;
 
 /**
@@ -16,4 +18,12 @@ public interface UserService {
      * @return
      */
     UserInfoVO getUserInfo(UserInfoParam param);
+
+    /**
+     * 分页获取用户信息列表
+     *
+     * @param param
+     * @return
+     */
+    PageBean<UserInfoVO> getUserInfoList(UserInfoListParam param);
 }

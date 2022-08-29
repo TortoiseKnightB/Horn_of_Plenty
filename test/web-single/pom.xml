@@ -26,6 +26,7 @@
         <hutool.version>5.8.5</hutool.version>
         <mybatis.spring.boot.version>2.2.0</mybatis.spring.boot.version>
         <mysql.version>8.0.25</mysql.version>
+        <pagehelper.starter.version>1.4.3</pagehelper.starter.version>
     </properties>
 
     <dependencies>
@@ -88,6 +89,12 @@
             <artifactId>logback-classic</artifactId>
             <version>1.2.10</version>
         </dependency>
+        <!-- PageHelper分页插件 -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>${pagehelper.starter.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -96,6 +103,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.7.2</version>
             </plugin>
         </plugins>
     </build>
