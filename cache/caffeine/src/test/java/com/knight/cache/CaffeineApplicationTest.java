@@ -2,23 +2,22 @@ package com.knight.cache;
 
 import com.github.benmanes.caffeine.cache.*;
 import com.github.benmanes.caffeine.cache.stats.CacheStats;
+import jdk.nashorn.internal.ir.debug.ObjectSizeCalculator;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.function.Function;
 
-// https://segmentfault.com/a/1190000038665523
-
 /**
+ * 参考文章：<a href="https://segmentfault.com/a/1190000038665523">全网最权威的Caffeine教程</a>
+ *
  * @author TortoiseKnightB
  * @date 2022/08/27
  */
@@ -275,18 +274,173 @@ class CaffeineApplicationTest {
 
     @DisplayName("刷新机制")
     @Test
-    public void test11() {
+    public void test11() throws InterruptedException {
+        // 设置写入后3秒后数据过期，2秒后如果有数据访问则刷新数据
+        LoadingCache<Integer, Integer> cache = Caffeine.newBuilder()
+                .refreshAfterWrite(2, TimeUnit.SECONDS)
+                .expireAfterWrite(35, TimeUnit.SECONDS)
+                .build(new CacheLoader<Integer, Integer>() {
+                    @Nullable
+                    @Override
+                    public Integer load(@NonNull Integer key) {
+                        System.out.println("load");
+                        return getInDB();
+                    }
 
+                    @Override
+                    public @Nullable Integer reload(@NonNull Integer key, @NonNull Integer oldValue) throws Exception {
+                        System.out.println("reload");
+                        return getInDB();
+                    }
+                });
+
+        cache.put(1, getInDB());
+        System.out.println("start index = " + index);
+
+        // 休眠2.5秒，后取值。因为超过2秒，触发刷新，但本次的取值仍为旧值
+        Thread.sleep(2500);
+        System.out.println(cache.getIfPresent(1));
+        // 等待刷新完成
+        Thread.sleep(500);
+        // 取刷新后的新值。本次间隔不超过2秒，不触发刷新
+        System.out.println(cache.getIfPresent(1));
+
+        Thread.sleep(2500);
+        // 超过2秒，触发刷新，取旧值
+        System.out.println(cache.getIfPresent(1));
+        Thread.sleep(500);
+        // 取刷新后的新值。本次间隔不超过2秒，不触发刷新
+        System.out.println(cache.getIfPresent(1));
+
+        // 间隔不超过2秒，不触发刷新
+        Thread.sleep(1000);
+        System.out.println(cache.getIfPresent(1));
+        // 间隔不超过2秒，不触发刷新
+        Thread.sleep(500);
+        System.out.println(cache.getIfPresent(1));
     }
 
-
+    @DisplayName("模拟二级缓存")
     @Test
-    public void test001() {
-        Cache<String, Integer> cache = Caffeine.newBuilder()
-                .maximumSize(100)
+    public void test12() throws InterruptedException {
+        // 设置最大缓存个数为1
+        LoadingCache<Integer, Integer> cache = Caffeine.newBuilder()
+                .maximumSize(1)
+                // 设置put和remove的回调
+                .writer(new CacheWriter<Integer, Integer>() {
+                    @Override
+                    public void write(@NonNull Integer key, @NonNull Integer value) {
+                        secondCacheMap.put(key, new WeakReference<>(value));
+                        System.out.println("触发CacheWriter.write，将key = " + key + "放入二级缓存中");
+                    }
+
+                    @Override
+                    public void delete(@NonNull Integer key, @Nullable Integer value, @NonNull RemovalCause cause) {
+                        switch (cause) {
+                            case EXPLICIT:
+                                secondCacheMap.remove(key);
+                                System.out.println("触发CacheWriter" +
+                                        ".delete，清除原因：主动清除，将key = " + key +
+                                        "从二级缓存清除");
+                                break;
+                            case SIZE:
+                                System.out.println("触发CacheWriter" +
+                                        ".delete，清除原因：缓存个数超过上限，key = " + key);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                })
+                .build(new CacheLoader<Integer, Integer>() {
+                    @Nullable
+                    @Override
+                    public Integer load(@NonNull Integer key) {
+                        WeakReference<Integer> value = secondCacheMap.get(key);
+                        if (value == null) {
+                            return null;
+                        }
+
+                        System.out.println("触发CacheLoader.load，从二级缓存读取key = " + key);
+                        return value.get();
+                    }
+                });
+
+        cache.put(1, 1);
+        cache.put(2, 2);
+        // 由于清除缓存是异步的，因而睡眠1秒等待清除完成
+        Thread.sleep(1000);
+
+        // 缓存超上限触发清除后
+        // Caffeine在调用CacheLoader.load拿到非null的数据后会重新放入缓存中，这样便导致缓存个数又超过了最大的上限了，所以清除了key为2的缓存
+        System.out.println("从Caffeine中get数据，key为1，value为" + cache.get(1));
+    }
+
+    @DisplayName("统计数据")
+    @Test
+    public void test13() {
+        LoadingCache<Integer, Integer> cache = Caffeine.newBuilder()
+                // 开启记录
                 .recordStats()
-//                .expireAfterWrite(5, TimeUnit.SECONDS)
-//                .expireAfterAccess(2, TimeUnit.SECONDS)
+                .build(new CacheLoader<Integer, Integer>() {
+                    @Override
+                    public @Nullable Integer load(@NonNull Integer key) {
+                        return getInDB(key);
+                    }
+                });
+
+//        cache.put(1,2);
+        cache.get(1);
+
+        // 命中率
+        System.out.println(cache.stats().hitRate());
+        // 被剔除的数量
+        System.out.println(cache.stats().evictionCount());
+        // 加载新值所花费的平均时间[纳秒]
+        System.out.println(cache.stats().averageLoadPenalty());
+    }
+
+    /**
+     * EXPLICIT：如果原因是这个，那么意味着数据被我们手动的remove掉了
+     * <p>
+     * REPLACED：就是替换了，也就是put数据的时候旧的数据被覆盖导致的移除
+     * <p>
+     * COLLECTED：这个有歧义点，其实就是收集，也就是垃圾回收导致的，一般是用弱引用或者软引用会导致这个情况
+     * <p>
+     * EXPIRED：数据过期，无需解释的原因。
+     * <p>
+     * SIZE：个数超过限制导致的移除
+     *
+     * @throws InterruptedException
+     */
+    @DisplayName("淘汰监听")
+    @Test
+    public void test14() throws InterruptedException {
+        LoadingCache<Integer, Integer> cache = Caffeine.newBuilder()
+                .expireAfterAccess(1, TimeUnit.SECONDS)
+                .scheduler(Scheduler.systemScheduler())
+                // 增加了淘汰监听
+                .removalListener(((key, value, cause) -> {
+                    System.out.println("淘汰通知，key：" + key + "，原因：" + cause);
+                }))
+                .build(new CacheLoader<Integer, Integer>() {
+                    @Override
+                    public @Nullable Integer load(@NonNull Integer key) throws Exception {
+                        return key;
+                    }
+                });
+
+        cache.put(1, 2);
+
+        Thread.currentThread().sleep(3000);
+
+        System.out.println(cache.get(1));
+    }
+
+    @DisplayName("为Key设置不同的过期时间")
+    @Test
+    public void test001() throws InterruptedException {
+        Cache<String, Integer> cache = Caffeine.newBuilder()
                 .expireAfter(new Expiry<String, Integer>() {
                     @Override
                     public long expireAfterCreate(@NonNull String key, @NonNull Integer value, long currentTime) {
@@ -311,11 +465,6 @@ class CaffeineApplicationTest {
                 })
                 .build();
 
-
-        cache.put("cliffcw1", 1);
-//        cache.put("cliffcw2", 2);
-//        cache.put("cliffcw3", 3);
-
         cache.policy().expireVariably().ifPresent(policy -> {
             policy.put("cliffcw1", 1, 3, TimeUnit.SECONDS);
             policy.put("cliffcw2", 2, 6, TimeUnit.SECONDS);
@@ -324,29 +473,21 @@ class CaffeineApplicationTest {
         System.out.println(cache.getIfPresent("cliffcw1"));
         System.out.println(cache.getIfPresent("cliffcw2"));
 
-//        CacheStats stats = cache.stats();
-//        long hitCount = stats.hitCount();
-//        System.out.println("命中率1：" + hitCount);
 
-//        try {
-//            Thread.sleep(5000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        System.out.println(cache.getIfPresent("cliffcw1"));
-//        System.out.println(cache.getIfPresent("cliffcw2"));
+        Thread.sleep(5000);
 
-//        long hitCount2 = stats.hitCount();
-//        System.out.println("命中率2：" + hitCount2);
+        System.out.println(cache.getIfPresent("cliffcw1"));
+        System.out.println(cache.getIfPresent("cliffcw2"));
 
-//        double hitRate = stats.hitRate();
-//        System.out.println(hitRate);
+        Thread.sleep(1500);
+
+        System.out.println(cache.getIfPresent("cliffcw1"));
+        System.out.println(cache.getIfPresent("cliffcw2"));
     }
 
     @Test
     public void test002() {
-        Cache<String, Integer> cache = Caffeine.newBuilder()
+        Cache<String, Object> cache = Caffeine.newBuilder()
 //                .maximumSize(2)
                 // 自定义weight上限
                 .maximumWeight(20)
@@ -354,20 +495,23 @@ class CaffeineApplicationTest {
                     // 根据value返回weight值
                     @Override
                     public @NonNegative int weigh(@NonNull Object key, @NonNull Object value) {
-                        return 10;
+                        long objectSize = ObjectSizeCalculator.getObjectSize(value);
+                        System.out.println(key + "-" + value + " 占用内存：" + objectSize);
+                        return (int) objectSize;
                     }
                 })
-                .removalListener(new RemovalListener<String, Integer>() {
+                .removalListener(new RemovalListener<String, Object>() {
                     @Override
-                    public void onRemoval(@Nullable String key, @Nullable Integer value, @NonNull RemovalCause cause) {
+                    public void onRemoval(@Nullable String key, @Nullable Object value, @NonNull RemovalCause cause) {
                         System.out.println("移除了key：" + key + " value：" + value + " cause：" + cause);
                     }
                 })
                 .build();
 
-        cache.put("key1", 1);
+        cache.put("key1", "1");
         cache.put("key2", 2);
-        cache.put("key3", 3);
+        cache.put("key3", "{name=Alen,age=16}");
+        cache.put("key4", "{na");
 
         System.out.println(cache.getIfPresent("key1"));
 
@@ -390,7 +534,7 @@ class CaffeineApplicationTest {
         return key + 1;
     }
 
-    private int index = 1;
+    private int index = 0;
 
     /**
      * 模拟从数据库中读取数据
@@ -402,5 +546,11 @@ class CaffeineApplicationTest {
         index++;
         return index;
     }
+
+    /**
+     * 充当二级缓存用，生命周期仅活到下个gc
+     */
+    private Map<Integer, WeakReference<Integer>> secondCacheMap = new ConcurrentHashMap<>();
+
 
 }
