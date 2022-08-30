@@ -54,6 +54,18 @@ public class CommonException extends RuntimeException {
         this.codeMessage = exception.getCodeMessage();
     }
 
+    /**
+     * @param exception   公共异常枚举类
+     * @param message     传递给前端的错误信息(传null返回默认值)
+     * @param codeMessage 具体错误原因（传null返回默认值）
+     */
+    public CommonException(EnumCommonException exception, String message, String codeMessage) {
+        super(exception.getCodeMessage());
+        this.errorCode = exception.getErrorCode();
+        this.message = message == null ? exception.getMessage() : message;
+        this.codeMessage = codeMessage == null ? exception.getCodeMessage() : codeMessage;
+    }
+
     @Override
     public String toString() {
         return "CommonException{" +
