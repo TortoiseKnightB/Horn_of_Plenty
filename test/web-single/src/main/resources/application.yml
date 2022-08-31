@@ -2,6 +2,10 @@ spring:
   profiles:
     active: local
 
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher # swagger3.0需要此路径匹配策略
+
 mybatis:
   mapper-locations: classpath:/mapper/*.xml
   config-location: classpath:mybatis-config.xml
@@ -9,3 +13,4 @@ mybatis:
 
 logging:
   config: classpath:logback-spring.xml
+

@@ -4,7 +4,7 @@
 
 - Controller、Service、Mapper框架
 - JSON工具类：JsonHelper
-- 日志工具类：LogData、LoggerHelper、LoggerPlusFactory
+- 日志工具类：LogData、LoggerHelper、LoggerPlusFactory、LogConstant
 - logstash配置：logback-spring.xml
 - 全局异常、全局日志处理：GlobalHandlerAspect
 - 非空参数校验：NullCheckAspect、NotBlank
