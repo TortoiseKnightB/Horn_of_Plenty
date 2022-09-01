@@ -20,6 +20,6 @@ import lombok.NoArgsConstructor;
 public class UserInfoParam extends BaseRequestParam {
 
     @NotBlank("name不能为空")
-    @ApiModelProperty(value = "用户名称", required = true)
+    @ApiModelProperty(value = "用户名称", example = "knight", required = true)
     private String name;
 }

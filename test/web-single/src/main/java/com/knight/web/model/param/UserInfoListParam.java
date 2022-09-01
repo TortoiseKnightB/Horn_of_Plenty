@@ -18,9 +18,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserInfoListParam extends BaseRequestParam {
 
-    @ApiModelProperty(value = "每页的数量，默认20条")
+    @ApiModelProperty(value = "每页的数量，默认20条", example = "20")
     private Integer pageSize;
 
-    @ApiModelProperty(value = "当前页，默认第1页")
+    @ApiModelProperty(value = "当前页，默认第1页", example = "1")
     private Integer pageNum;
 }

@@ -10,6 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * @author TortoiseKnightB
@@ -28,6 +29,7 @@ public class UserController {
      *
      * @return
      */
+    @ApiIgnore()
     @GetMapping
     public ResultInfo<String> home() {
         return new ResultInfo<String>().succeed("api/user success");
