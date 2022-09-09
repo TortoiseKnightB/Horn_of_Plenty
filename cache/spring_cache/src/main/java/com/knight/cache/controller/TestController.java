@@ -5,6 +5,7 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,10 +27,10 @@ public class TestController {
     }
 
 
-    @Cacheable("tcache01")
-    @GetMapping("/cache01")
-    public String testCache01() {
-        System.out.println("不走缓存，执行接口 testCache01");
+    @Cacheable(cacheNames = "tcache01", key = "#id")
+    @PostMapping("/cache01")
+    public String testCache01(Integer id) {
+        System.out.println("模拟去db查询~~~" + id);
         return "result testCache01";
     }
 

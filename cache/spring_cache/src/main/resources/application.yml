@@ -1,0 +1,4 @@
+spring:
+  redis:
+    host: alicloud
+    port: 6379

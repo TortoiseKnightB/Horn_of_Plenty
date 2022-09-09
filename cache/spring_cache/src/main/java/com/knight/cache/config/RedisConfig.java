@@ -39,21 +39,6 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory factory) {
-//        RedisCacheManager cacheManager = RedisCacheManager.RedisCacheManagerBuilder
-//                //Redis链接工厂
-//                .fromConnectionFactory(factory)
-//                //缓存配置 通用配置  默认存储一小时
-//                .cacheDefaults(getCacheConfigurationWithTtl(Duration.ofHours(1)))
-//                //配置同步修改或删除  put/evict
-//                .transactionAware()
-//                //对于不同的cacheName我们可以设置不同的过期时间
-//                .withCacheConfiguration("app:", getCacheConfigurationWithTtl(Duration.ofHours(5)))
-//                .withCacheConfiguration("user:", getCacheConfigurationWithTtl(Duration.ofHours(2)))
-//                .build();
-//        return cacheManager;
-
-
-
 
         RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig();
         // 设置缓存管理器管理的缓存的默认过期时间
@@ -72,28 +57,28 @@ public class RedisConfig extends CachingConfigurerSupport {
         Map<String, RedisCacheConfiguration> configMap = new HashMap<>();
         configMap.put(userCacheName, defaultCacheConfig.entryTtl(Duration.ofSeconds(userCacheExpireTime)));
 
-        RedisCacheManager cacheManager = RedisCacheManager.builder(lettuceConnectionFactory)
-                .cacheDefaults(defaultCacheConfig)
-                .initialCacheNames(cacheNames)
-                .withInitialCacheConfigurations(configMap)
+        RedisCacheManager cacheManager = RedisCacheManager.builder(factory)
+                .cacheDefaults(defaultCacheConfig)  // 默认配置（强烈建议配置上）。  比如动态创建出来的都会走此默认配置
+                .initialCacheNames(cacheNames)  // 初始化时候就放进去的cacheNames
+                .withInitialCacheConfigurations(configMap)  // 个性化配置  可以提供一个Map，针对每个Cache都进行个性化的配置（否则是默认配置）
                 .build();
         return cacheManager;
     }
 
-    //缓存的基本配置对象
-    private RedisCacheConfiguration getCacheConfigurationWithTtl(Duration duration) {
-        return RedisCacheConfiguration
-                .defaultCacheConfig()
-                //设置key value的序列化方式
-                // 设置key为String
-                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
-                // 设置value 为自动转Json的Object
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(fastJsonRedisSerializer))
-                // 不缓存null
-                .disableCachingNullValues()
-                // 设置缓存的过期时间
-                .entryTtl(duration);
-    }
+//    //缓存的基本配置对象
+//    private RedisCacheConfiguration getCacheConfigurationWithTtl(Duration duration) {
+//        return RedisCacheConfiguration
+//                .defaultCacheConfig()
+//                //设置key value的序列化方式
+//                // 设置key为String
+//                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
+//                // 设置value 为自动转Json的Object
+//                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(fastJsonRedisSerializer))
+//                // 不缓存null
+//                .disableCachingNullValues()
+//                // 设置缓存的过期时间
+//                .entryTtl(duration);
+//    }
 
     @Override
     public KeyGenerator keyGenerator() {
@@ -124,11 +109,7 @@ public class RedisConfig extends CachingConfigurerSupport {
         // Json序列化配置
         Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
         ObjectMapper om = new ObjectMapper();
-        // 指定要序列化的域，field,get和set,以及修饰符范围.ANY指都有,从private到public
         om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        // 指定序列化输入的类型，类必须是非final修饰的，final修饰的类，比如String,Integer等会抛出异常
-        // 使存储到redis里的数据是有类型的json数据，如：["com.knight.cache.model.User",{"username":"Ben","age":24}]
-        // 不使用则存储纯Json数据，如：{"username":"Alen","age":24}
         om.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL);
         jackson2JsonRedisSerializer.setObjectMapper(om);
 

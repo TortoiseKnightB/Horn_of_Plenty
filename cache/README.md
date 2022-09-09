@@ -47,3 +47,18 @@
 @Caching
 
 @Caching能够支持多个缓存注解生效。
+
+- [玩转Spring Cache --- 整合分布式缓存Redis Cache（使用Lettuce、使用Spring Data Redis）](https://cloud.tencent.com/developer/article/1497594)
+
+
+
+
+
+
+
+
+
+
+https://www.cnblogs.com/shog808/p/13826206.html
+https://cloud.tencent.com/developer/article/1497599
+https://www.cnblogs.com/lullaby/p/9826665.html

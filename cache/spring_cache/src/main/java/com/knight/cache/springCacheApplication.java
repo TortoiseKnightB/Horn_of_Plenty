@@ -9,7 +9,6 @@ import org.springframework.cache.annotation.EnableCaching;
  * @date 2022/09/05
  */
 @SpringBootApplication
-@EnableCaching
 public class springCacheApplication {
 
     public static void main(String[] args) {
