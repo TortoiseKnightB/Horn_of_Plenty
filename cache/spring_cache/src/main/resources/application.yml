@@ -2,3 +2,5 @@ spring:
   redis:
     host: alicloud
     port: 6379
+    client-type: lettuce
+

@@ -15,6 +15,7 @@
   jackson工具在序列化和反序列化时,需要明确指定Class类型,因此策略封装起来稍微复杂
 - [RedisTemplate自定义序列化](https://codeantenna.com/a/6PeI09BhTj)
 - [ObjectMapper.activateDefaultTyping详解](https://blog.csdn.net/zzhongcy/article/details/105813105)
+- [RedisConfig自定义配置 redis工具类](https://blog.csdn.net/qq_55362295/article/details/121531088)
 
 ### Spring Cache
 
@@ -62,3 +63,4 @@
 https://www.cnblogs.com/shog808/p/13826206.html
 https://cloud.tencent.com/developer/article/1497599
 https://www.cnblogs.com/lullaby/p/9826665.html
+https://blog.csdn.net/software_Manito/article/details/110136562
