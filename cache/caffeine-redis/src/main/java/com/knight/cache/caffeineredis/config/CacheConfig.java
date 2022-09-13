@@ -4,8 +4,13 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import com.github.benmanes.caffeine.cache.CacheLoader;
+import com.github.benmanes.caffeine.cache.CacheWriter;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.RemovalCause;
 import com.knight.cache.caffeineredis.consts.CacheConstant;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -25,6 +30,7 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import javax.annotation.Resource;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.HashMap;
@@ -44,6 +50,11 @@ public class CacheConfig extends CachingConfigurerSupport {
     @Resource
     private LettuceConnectionFactory lettuceConnectionFactory;
 
+    /**
+     * 二级缓存——Redis
+     *
+     * @return
+     */
     @Primary
     @Bean(name = CacheConstant.REDIS_CACHE_MANAGER)
     public CacheManager redisCacheManager() {
@@ -70,14 +81,52 @@ public class CacheConfig extends CachingConfigurerSupport {
                 .build();
     }
 
+    /**
+     * 一级缓存——Caffeine
+     *
+     * @return
+     */
     @Bean(name = CacheConstant.CAFFEINE_CACHE_MANAGER)
-    public CacheManager caffeineCacheManager() {
+    public CacheManager caffeineCacheManager(RedisTemplate<String, Object> redisTemplate) {
         CaffeineCacheManager cacheManager = new CaffeineCacheManager();
         cacheManager.setCaffeine(Caffeine.newBuilder()
                 .expireAfterWrite(1, TimeUnit.MINUTES)
                 // 初始的缓存空间大小
                 .initialCapacity(100)
-                .maximumSize(100));
+                .maximumSize(100)
+                .writer(new CacheWriter<Object, Object>() {
+                    @Override
+                    public void write(@NonNull Object key, @NonNull Object value) {
+                        System.out.println("触发CacheWriter.write，将key = " + key + "放入二级缓存中");
+                    }
+
+                    @Override
+                    public void delete(@NonNull Object key, @Nullable Object value, @NonNull RemovalCause cause) {
+                        switch (cause) {
+                            case EXPLICIT:
+                                System.out.println("触发CacheWriter" +
+                                        ".delete，清除原因：主动清除，将key = " + key +
+                                        "从二级缓存清除");
+                                break;
+                            case SIZE:
+                                System.out.println("触发CacheWriter" +
+                                        ".delete，清除原因：缓存个数超过上限，key = " + key);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }));
+        cacheManager.setCacheLoader(new CacheLoader<Object, Object>() {
+            @Nullable
+            @Override
+            public Object load(@NonNull Object key) {
+                // 一级缓存中没有获取到，从二级缓存中获取，更新一级缓存
+                Object value = redisTemplate.opsForValue().get(key);
+                return value;
+            }
+        });
+
         return cacheManager;
     }
 

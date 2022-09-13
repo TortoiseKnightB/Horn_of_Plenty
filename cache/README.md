@@ -1,5 +1,7 @@
 # Cache
 
+- [https://segmentfault.com/a/1190000038665523](https://segmentfault.com/a/1190000038665523)
+
 ### Redis为什么要设置序列化
 
 - 任何存储都需要序列化。只不过常规你在用DB一类存储的时候，这个事情DB帮你在内部搞定了,而Redis并不会帮你做这个事情
@@ -24,9 +26,6 @@
 - [Spring Cache](https://www.jianshu.com/p/33c019de9115)
 - [史上最全的Spring Boot Cache使用与整合](https://blog.csdn.net/qq_32448349/article/details/101696892)
 
-
-
-
 除了CacheConfig只能用于类上，其余的都可以用在类或者方法上，用在方法上好理解，缓存方法结果，如果用在类上，就相当于对该类的所有可以缓存的方法（需要是public方法）加上注解。
 
 @Cacheable
@@ -50,15 +49,6 @@
 @Caching能够支持多个缓存注解生效。
 
 - [玩转Spring Cache --- 整合分布式缓存Redis Cache（使用Lettuce、使用Spring Data Redis）](https://cloud.tencent.com/developer/article/1497594)
-
-
-
-
-
-
-
-
-
 
 https://www.cnblogs.com/shog808/p/13826206.html
 https://cloud.tencent.com/developer/article/1497599
