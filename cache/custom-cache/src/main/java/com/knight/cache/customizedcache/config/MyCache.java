@@ -14,7 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author TortoiseKnightB
  * @date 2022/09/13
  */
-@Configuration
 public class MyCache implements Cache {
     final static Logger logger = LoggerFactory.getLogger(MyCache.class);
 
