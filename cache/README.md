@@ -1,5 +1,12 @@
 # Cache
 
+- caffeine：Caffeine缓存示例（基础）
+- redis：Redis缓存示例（基础）
+- spring_cache：Spring Cache整合Redis示例
+- caffeine-redis：Spring Cache实现多CacheManager示例
+- custom-cache：自定义Spring Cache(Cache、CacheManager)示例（基础）
+- redis-caffeine-cache：二级缓存的最终实现版（推荐）
+
 - [https://segmentfault.com/a/1190000038665523](https://segmentfault.com/a/1190000038665523)
 
 ### Redis为什么要设置序列化
