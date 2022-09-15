@@ -7,7 +7,7 @@
 - custom-cache：自定义Spring Cache(Cache、CacheManager)示例（基础）
 - redis-caffeine-cache：二级缓存的最终实现版（推荐）
 
-- [https://segmentfault.com/a/1190000038665523](https://segmentfault.com/a/1190000038665523)
+- [全网最权威的Caffeine教程](https://segmentfault.com/a/1190000038665523)
 
 ### Redis为什么要设置序列化
 
