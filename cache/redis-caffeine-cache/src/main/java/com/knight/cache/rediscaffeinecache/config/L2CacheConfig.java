@@ -17,6 +17,7 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.lang.reflect.Method;
+import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -28,10 +29,11 @@ import java.util.concurrent.TimeUnit;
 public class L2CacheConfig {
 
     @Bean
-    public L2CacheManager cacheManager() {
-        return null;
+    public L2CacheManager cacheManager(RedisTemplate<String, Object> redisTemplate, Cache<Object, Object> caffeine) {
+        return new L2CacheManager(new HashSet<>(), redisTemplate, caffeine, "PREFIX");
     }
 
+    @Bean
     public Cache<Object, Object> caffeine() {
         return Caffeine.newBuilder()
                 .expireAfterWrite(1, TimeUnit.MINUTES)
