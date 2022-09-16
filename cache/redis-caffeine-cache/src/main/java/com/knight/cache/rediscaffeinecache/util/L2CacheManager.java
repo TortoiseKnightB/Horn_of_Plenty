@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentMap;
 public class L2CacheManager implements CacheManager {
 
     /**
-     * CacheManager管理的所有缓存（CacheName=>Cache），不用事先声明，会自动创建
+     * CacheManager管理的所有缓存（CacheName=>L2Cache），不用事先声明，会自动创建
      */
     private ConcurrentMap<String, Cache> cacheMap = new ConcurrentHashMap<>();
 

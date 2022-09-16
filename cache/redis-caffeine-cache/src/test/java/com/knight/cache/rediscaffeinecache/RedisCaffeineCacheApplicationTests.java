@@ -18,6 +18,10 @@ class RedisCaffeineCacheApplicationTests {
     @DisplayName("基本测试")
     @Test
     void test01() {
+
+
+
+
         String userId = "user01";
         log.info("第1次查询");
         UserDO userDO1 = l2CacheService.queryUser(userId);
