@@ -28,21 +28,25 @@ import java.util.concurrent.TimeUnit;
 @EnableCaching
 public class L2CacheConfig {
 
+    // TODO:将配置抽象为配置类
+
     @Bean
     public L2CacheManager cacheManager(RedisTemplate<String, Object> redisTemplate, Cache<Object, Object> caffeine) {
         return new L2CacheManager(new HashSet<>(), redisTemplate, caffeine, "PREFIX");
     }
 
+    // TODO:缓存大小等初始化设置
     @Bean
     public Cache<Object, Object> caffeine() {
         return Caffeine.newBuilder()
-                .expireAfterWrite(1, TimeUnit.MINUTES)
+                .expireAfterWrite(60, TimeUnit.MINUTES)
                 // 初始的缓存空间大小
                 .initialCapacity(100)
                 .maximumSize(1000)
                 .build();
     }
 
+    // TODO:缓存大小等初始化设置
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
@@ -66,6 +70,7 @@ public class L2CacheConfig {
         return template;
     }
 
+    // TODO: 目前此方法会造成Cacheable与CacheEvict的缓存key不一致
     @Bean
     public KeyGenerator keyGenerator() {
         return new KeyGenerator() {

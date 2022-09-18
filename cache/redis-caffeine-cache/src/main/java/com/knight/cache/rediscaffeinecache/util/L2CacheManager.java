@@ -15,10 +15,11 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class L2CacheManager implements CacheManager {
 
+    // TODO:改为private权限
     /**
      * CacheManager管理的所有缓存（CacheName=>L2Cache），不用事先声明，会自动创建
      */
-    private ConcurrentMap<String, Cache> cacheMap = new ConcurrentHashMap<>();
+    public ConcurrentMap<String, Cache> cacheMap = new ConcurrentHashMap<>();
 
     /**
      * CacheManager管理的所有缓存的名称
@@ -40,7 +41,7 @@ public class L2CacheManager implements CacheManager {
         this.prefix = prefix;
     }
 
-    // TODO：所有缓存都用的同一个redisTemplate和caffeine？待改为分别使用
+    // TODO：所有缓存都用的同一个redisTemplate和caffeine？待改为分别使用，方便清除某一个方法的本地缓存(好像也不用‍)，不分别使用方便控制缓存总大小
     @Override
     public Cache getCache(String name) {
         Cache cache = cacheMap.get(name);
@@ -48,8 +49,8 @@ public class L2CacheManager implements CacheManager {
             return cache;
         }
         cache = new L2Cache(name, caffeine, redisTemplate, prefix);
-        // TODO: cacheNames里面不用新增？
         Cache oldCache = cacheMap.putIfAbsent(name, cache);
+        cacheNames.add(name);
         return oldCache == null ? cache : oldCache;
     }
 

@@ -1,6 +1,7 @@
 package com.knight.cache.rediscaffeinecache.util;
 
 import com.github.benmanes.caffeine.cache.Cache;
+import com.knight.cache.rediscaffeinecache.config.L2CacheConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.support.AbstractValueAdaptingCache;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -10,6 +11,8 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
+
+// TODO: 是否允许存储空值、一级缓存开关
 
 /**
  * @author TortoiseKnightB
@@ -32,6 +35,7 @@ public class L2Cache extends AbstractValueAdaptingCache {
     private Map<String, ReentrantLock> lockMap = new ConcurrentHashMap<>();
 
 
+    // TODO: 优化构造函数
     protected L2Cache(boolean allowNullValues) {
         super(allowNullValues);
     }
@@ -52,6 +56,10 @@ public class L2Cache extends AbstractValueAdaptingCache {
         this.prefix = prefix;
     }
 
+    /**
+     * @param key 此处key为{@link L2CacheConfig#keyGenerator()}生成的值
+     * @return
+     */
     @Override
     protected Object lookup(Object key) {
         String cacheKey = getKey(key);
@@ -108,6 +116,10 @@ public class L2Cache extends AbstractValueAdaptingCache {
         }
     }
 
+    /**
+     * @param key   此处key为{@link L2CacheConfig#keyGenerator()}生成的值
+     * @param value
+     */
     @Override
     public void put(Object key, Object value) {
         String cacheKey = getKey(key);
@@ -119,13 +131,18 @@ public class L2Cache extends AbstractValueAdaptingCache {
         caffeine.put(cacheKey, toStoreValue(value));
     }
 
+    /**
+     * @param key 此处key为{@link L2CacheConfig#keyGenerator()}生成的值
+     */
     @Override
     public void evict(Object key) {
         // 先清除redis中缓存数据，然后清除caffeine中的缓存。避免清除caffeine缓存后其他请求命中redis，又更新caffeine
         redisTemplate.delete(getKey(key));
         caffeine.invalidate(getKey(key));
+        System.out.println("evict");
     }
 
+    // TODO: 初始化的时候给Caffeine和Redis作大小限制，这里不再回收垃圾缓存
     @Override
     public void clear() {
         // 先清除redis中缓存数据，然后清除caffeine中的缓存。避免清除caffeine缓存后其他请求命中redis，又更新caffeine
