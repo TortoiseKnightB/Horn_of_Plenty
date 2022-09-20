@@ -15,6 +15,8 @@ import java.util.concurrent.locks.ReentrantLock;
 // TODO: 是否允许存储空值、一级缓存开关
 
 /**
+ * 自定义二级缓存
+ *
  * @author TortoiseKnightB
  * @date 2022/09/15
  */

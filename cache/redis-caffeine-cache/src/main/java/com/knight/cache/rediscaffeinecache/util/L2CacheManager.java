@@ -10,6 +10,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
+ * 自定义二级缓存Manager
+ *
  * @author TortoiseKnightB
  * @date 2022/09/15
  */

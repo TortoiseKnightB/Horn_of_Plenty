@@ -32,7 +32,7 @@ public class TestController {
 //        for (String s : RedisCaffeineCacheApplication.applicationContext.getBeanNamesForType(L2CacheManager.class)) {
 //            System.out.println(s);
 //        }
-        L2CacheManager cacheManager = RedisCaffeineCacheApplication.applicationContext.getBean("cacheManager", L2CacheManager.class);
+        L2CacheManager cacheManager = RedisCaffeineCacheApplication.applicationContext.getBean("l2CacheManager", L2CacheManager.class);
         System.out.println(cacheManager);
         Cache cache = cacheManager.cacheMap.get("userCache");
         System.out.println(cache.toString());

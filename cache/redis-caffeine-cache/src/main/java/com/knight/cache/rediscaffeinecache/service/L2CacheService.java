@@ -43,10 +43,14 @@ public class L2CacheService {
      * @param userId
      * @return
      */
-    @Cacheable(cacheNames = "userCache", keyGenerator = "keyGenerator")
+    @Cacheable(cacheManager = "l2CacheManager", cacheNames = "userCache", keyGenerator = "keyGenerator")
     public UserDO queryUser(String userId) {
         UserDO userDO = userMap.get(userId);
-        log.info("数据库查询数据：" + userDO.toString());
+        if (userDO == null) {
+            log.info("数据库查询失败，userId:" + userId);
+        } else {
+            log.info("数据库查询数据：" + userDO.toString());
+        }
         return userDO;
     }
 
@@ -55,7 +59,7 @@ public class L2CacheService {
      *
      * @return
      */
-    @Cacheable(cacheNames = "userAll", keyGenerator = "keyGenerator")
+    @Cacheable(cacheManager = "l2CacheManager", cacheNames = "userAll", keyGenerator = "keyGenerator")
     public List<UserDO> queryUserAll() {
         List<UserDO> userAll = new ArrayList<>(userMap.values());
         log.info("数据库查询数据：" + userAll.toString());
@@ -70,7 +74,7 @@ public class L2CacheService {
      * @param userId
      * @return
      */
-    @CacheEvict(cacheNames = "userCache")
+    @CacheEvict(cacheManager = "l2CacheManager", cacheNames = "userCache")
     public String clear(String userId) {
         return "clear cache, key:" + userId;
     }

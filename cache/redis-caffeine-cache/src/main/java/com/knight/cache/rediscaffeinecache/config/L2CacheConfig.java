@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.knight.cache.rediscaffeinecache.util.L2CacheManager;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +19,7 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
 
@@ -31,7 +34,7 @@ public class L2CacheConfig {
     // TODO:将配置抽象为配置类
 
     @Bean
-    public L2CacheManager cacheManager(RedisTemplate<String, Object> redisTemplate, Cache<Object, Object> caffeine) {
+    public L2CacheManager l2CacheManager(@Qualifier("l2RedisTemplate") RedisTemplate<String, Object> redisTemplate, Cache<Object, Object> caffeine) {
         return new L2CacheManager(new HashSet<>(), redisTemplate, caffeine, "PREFIX");
     }
 
@@ -47,6 +50,7 @@ public class L2CacheConfig {
     }
 
     // TODO:缓存大小等初始化设置
+    @Qualifier("l2RedisTemplate")
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
@@ -58,6 +62,9 @@ public class L2CacheConfig {
         ObjectMapper om = new ObjectMapper();
         om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         om.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL);
+        // 添加序列化 java.time 对象的能力
+        om.registerModule(new JavaTimeModule());
+        om.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
         jackson2JsonRedisSerializer.setObjectMapper(om);
 
         //配置具体的序列化方式
