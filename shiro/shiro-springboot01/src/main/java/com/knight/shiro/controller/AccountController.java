@@ -76,6 +76,7 @@ public class AccountController {
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, password);
         try {
+            // 从subject.login进入认证模块
             subject.login(usernamePasswordToken);
             Account account = (Account) subject.getPrincipal();
             // 设置session，给浏览器设置cookie
