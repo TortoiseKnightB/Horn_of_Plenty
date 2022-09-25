@@ -4,8 +4,10 @@ import com.knight.shiro.entity.Account;
 import com.knight.shiro.service.AccountService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
@@ -59,13 +61,27 @@ public class AccountRealm extends AuthorizingRealm {
         // 关键步骤，从这里读取数据库中的密码
         Account account = accountService.getAccount(usernamePasswordToken.getUsername());
         if (account != null) {
-            // 给加密方式加盐
+            // 这里将设置subject的principal，并验证密码（密码的比对由shiro自动完成）
+            // 根据用户的情况，来构建 AuthenticationInfo 并返回，通常使用的实现类为 SimpleAuthenticationInfo
+            // principal：认证的实体信息，可以是username，也可以是对应的实体类对象
+            Object principal = account;
+            // credentials：密码
+            Object credentials = account.getPassword();
+            // realmName：当前 realm 对象的 name，调用父类的getName()方法即可
+            String realmName = getName();
+            // salt：给加密方式加盐(即便两个人密码一样，加盐后也不一样)
             ByteSource salt = ByteSource.Util.bytes("salt");
-            // 这里将设置subject的principal
-            SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(account, account.getPassword(), salt, getName());
+            SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(principal, credentials, salt, realmName);
             return authenticationInfo;
         }
         return null;
+    }
+
+
+    // 使用 new SimpleHash(algorithmName, source, salt, hashIterations) 来计算盐值加密后的密码的值
+    private String salt(String algorithmName, Object source, Object salt, int hashIterations) {
+        SimpleHash hash = new SimpleHash(algorithmName, source, salt, hashIterations);
+        return hash.toString();
     }
 }
 
