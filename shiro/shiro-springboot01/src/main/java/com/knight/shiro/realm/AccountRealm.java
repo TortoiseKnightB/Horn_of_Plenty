@@ -65,7 +65,7 @@ public class AccountRealm extends AuthorizingRealm {
             // 根据用户的情况，来构建 AuthenticationInfo 并返回，通常使用的实现类为 SimpleAuthenticationInfo
             // principal：认证的实体信息，可以是username，也可以是对应的实体类对象
             Object principal = account;
-            // credentials：密码
+            // credentials：密码（会被自动调用，用来和token比对）
             Object credentials = account.getPassword();
             // realmName：当前 realm 对象的 name，调用父类的getName()方法即可
             String realmName = getName();

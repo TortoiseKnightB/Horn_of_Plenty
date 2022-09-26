@@ -33,3 +33,9 @@
 - nbf: 定义在什么时间之前，该jwt都是不可用的.
 - iat: jwt的签发时间
 - jti: jwt的唯一身份标识，主要用来作为一次性token,从而回避重放攻击
+
+### 推荐文章
+
+- [shiro源码分析](https://blog.csdn.net/qq_38366063/article/details/103755431)
+- [springboot整合Shiro+jwt 前后端分离 超级详细的shiro+jwt鉴权过程](https://blog.csdn.net/Gorho/article/details/115921028)
+- [Shiro 框架 BasicHttpAuthenticationFilter 认证流程](https://blog.csdn.net/saienenen/article/details/111031108)
