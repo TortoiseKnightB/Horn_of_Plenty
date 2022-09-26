@@ -1,8 +1,13 @@
 package com.knight.shiro.realms;
 
+
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
+import com.knight.shiro.entity.UserEntity;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -12,88 +17,105 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 
+/**
+ * 同时开启身份验证和权限验证，需要继承 AuthorizingRealm
+ * 并实现其  doGetAuthenticationInfo()和 doGetAuthorizationInfo 两个方法
+ */
+@SuppressWarnings("serial")
 public class ShiroRealm extends AuthorizingRealm {
+    public static Map<String, UserEntity> userMap = new HashMap<String, UserEntity>(16);
+    public static Map<String, Set<String>> roleMap = new HashMap<String, Set<String>>(16);
+    public static Map<String, Set<String>> permMap = new HashMap<String, Set<String>>(16);
 
+    static {
+        UserEntity user1 = new UserEntity(1L, "gorho", "dd524c4c66076d1fa07e1fa1c94a91233772d132", "灰先生", false);
+        UserEntity user2 = new UserEntity(2L, "plum", "cce369436bbb9f0325689a3a6d5d6b9b8a3f39a0", "李先生", false);
+
+        userMap.put("gorho", user1);
+        userMap.put("plum", user2);
+
+        roleMap.put("gorho", new HashSet<String>() {
+            {
+                add("admin");
+
+            }
+        });
+
+        roleMap.put("plum", new HashSet<String>() {
+            {
+                add("guest");
+            }
+        });
+        permMap.put("plum", new HashSet<String>() {
+            {
+                add("article:read");
+            }
+        });
+    }
+
+    /**
+     * 限定这个 Realm 只处理 UsernamePasswordToken
+     */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(
-            AuthenticationToken token) throws AuthenticationException {
-        System.out.println("[FirstRealm] doGetAuthenticationInfo");
+    public boolean supports(AuthenticationToken token) {
+        return token instanceof UsernamePasswordToken;
+    }
 
-        //1. �� AuthenticationToken ת��Ϊ UsernamePasswordToken
-        UsernamePasswordToken upToken = (UsernamePasswordToken) token;
+    /**
+     * 查询数据库，将获取到的用户安全数据封装返回
+     */
+    @Override
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+        // 从 AuthenticationToken 中获取当前用户
+        String username = (String) token.getPrincipal();
+        // 查询数据库获取用户信息，此处使用 Map 来模拟数据库
+        UserEntity user = userMap.get(username);
 
-        //2. �� UsernamePasswordToken ������ȡ username
-        String username = upToken.getUsername();
-
-        //3. �������ݿ�ķ���, �����ݿ��в�ѯ username ��Ӧ���û���¼
-        System.out.println("�����ݿ��л�ȡ username: " + username + " ����Ӧ���û���Ϣ.");
-
-        //4. ���û�������, ������׳� UnknownAccountException �쳣
-        if ("unknown".equals(username)) {
-            throw new UnknownAccountException("�û�������!");
+        // 用户不存在
+        if (user == null) {
+            throw new UnknownAccountException("用户不存在！");
         }
 
-        //5. �����û���Ϣ�����, �����Ƿ���Ҫ�׳������� AuthenticationException �쳣.
-        if ("monster".equals(username)) {
-            throw new LockedAccountException("�û�������");
+        // 用户被锁定
+        if (user.getLocked()) {
+            throw new LockedAccountException("该用户已被锁定,暂时无法登录！");
         }
 
-        //6. �����û������, ������ AuthenticationInfo ���󲢷���. ͨ��ʹ�õ�ʵ����Ϊ: SimpleAuthenticationInfo
-        //������Ϣ�Ǵ����ݿ��л�ȡ��.
-        //1). principal: ��֤��ʵ����Ϣ. ������ username, Ҳ���������ݱ��Ӧ���û���ʵ�������.
-        Object principal = username;
-        //2). credentials: ����.
-        Object credentials = null; //"fc1709d0a95a6be30bc5926fdb7f22f4";
-        if ("admin".equals(username)) {
-            credentials = "038bdaf98f2037b31f1e75b5b4c9b26e";
-        } else if ("user".equals(username)) {
-            credentials = "098d2c478e9c11555ce2823231e02ec1";
-        }
-
-        //3). realmName: ��ǰ realm ����� name. ���ø���� getName() ��������
-        String realmName = getName();
-        //4). ��ֵ.
+        // 使用用户名作为盐值
         ByteSource credentialsSalt = ByteSource.Util.bytes(username);
 
-        SimpleAuthenticationInfo info = null; //new SimpleAuthenticationInfo(principal, credentials, realmName);
-        info = new SimpleAuthenticationInfo(principal, credentials, credentialsSalt, realmName);
+        /**
+         * 将获取到的用户数据封装成 AuthenticationInfo 对象返回，此处封装为 SimpleAuthenticationInfo 对象。
+         *  参数1. 认证的实体信息，可以是从数据库中获取到的用户实体类对象或者用户名
+         *  参数2. 查询获取到的登录密码
+         *  参数3. 盐值
+         *  参数4. 当前 Realm 对象的名称，直接调用父类的 getName() 方法即可
+         */
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, user.getPassword(), credentialsSalt,
+                getName());
         return info;
     }
 
-    public static void main(String[] args) {
-        String hashAlgorithmName = "MD5";
-        Object credentials = "123456";
-        Object salt = ByteSource.Util.bytes("user");
-        ;
-        int hashIterations = 1024;
-
-        Object result = new SimpleHash(hashAlgorithmName, credentials, salt, hashIterations);
-        System.out.println(result);
-    }
-
-    //授权shiro会回调的方法
+    /**
+     * 查询数据库，将获取到的用户的角色及权限信息返回
+     */
     @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(
-            PrincipalCollection principals) {
-        //1. 从PrincipalCollection中获取用户登录的信息
-        Object principal = principals.getPrimaryPrincipal();
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        // 获取当前用户
+        UserEntity currentUser = (UserEntity) SecurityUtils.getSubject().getPrincipal();
+        // UserEntity currentUser = (UserEntity)principals.getPrimaryPrincipal();
+        // 查询数据库，获取用户的角色信息
+        Set<String> roles = roleMap.get(currentUser.getName());
+        // 查询数据库，获取用户的权限信息
+        Set<String> perms = permMap.get(currentUser.getName());
 
-        //2. 利用用户登录的信息来获取当前用户的权限（可能需要查询数据库）
-        Set<String> roles = new HashSet<>();
-        roles.add("user");
-        if ("admin".equals(principal)) {
-            roles.add("admin");
-        }
-
-        //3. 创建 SimpleAuthorizationInfo, 并设置其 roles 属性
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(roles);
-
-        //4. 返回 SimpleAuthorizationInfo 对象.
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        info.setRoles(roles);
+        info.setStringPermissions(perms);
         return info;
     }
 }
