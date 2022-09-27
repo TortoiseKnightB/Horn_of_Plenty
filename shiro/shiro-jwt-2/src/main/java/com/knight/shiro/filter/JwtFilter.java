@@ -204,8 +204,8 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         httpServletResponse.setContentType("application/json;charset=UTF-8");
         httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
 
-        PrintWriter writer = httpServletResponse.getWriter();
-        writer.write("{\"errorCode\":401,\"msg\":\"UNAUTHORIZED\"}");
+//        PrintWriter writer = httpServletResponse.getWriter();
+//        writer.write("{\"errorCode\":401,\"msg\":\"UNAUTHORIZED\"}");
         fillCorsHeader(WebUtils.toHttp(request), httpServletResponse);
         return false;
     }
@@ -214,6 +214,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     protected void fillCorsHeader(HttpServletRequest request, HttpServletResponse response) {
         response.setHeader("Access-control-Allow-Origin", request.getHeader("Origin"));
         response.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,HEAD");
+        // TODO: request.getHeader("Access-Control-Request-Headers") 可能返回 "null"
         response.setHeader("Access-Control-Allow-Headers", request.getHeader("Access-Control-Request-Headers") + "," + JwtUtils.AUTH_HEADER);
     }
 }

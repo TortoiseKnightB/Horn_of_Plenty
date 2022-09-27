@@ -22,6 +22,8 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 
 /**
+ * {@link #supports(AuthenticationToken)}限定该realm只处理UsernamePasswordToken，即只用来登录和授权。Jwt拦截由{@link JwtRealm}实现
+ * <p>
  * 同时开启身份验证和权限验证，需要继承 AuthorizingRealm
  * 并实现其  doGetAuthenticationInfo()和 doGetAuthorizationInfo 两个方法
  */
@@ -32,25 +34,26 @@ public class ShiroRealm extends AuthorizingRealm {
     public static Map<String, Set<String>> permMap = new HashMap<String, Set<String>>(16);
 
     static {
-        UserEntity user1 = new UserEntity(1L, "gorho", "dd524c4c66076d1fa07e1fa1c94a91233772d132", "灰先生", false);
-        UserEntity user2 = new UserEntity(2L, "plum", "cce369436bbb9f0325689a3a6d5d6b9b8a3f39a0", "李先生", false);
+        // 密码为123456
+        UserEntity user1 = new UserEntity(1L, "Alen", "f1f9f1d73234cffbb92b80494fbdaac01a525bd7", "艾伦", false);
+        // 密码为123456
+        UserEntity user2 = new UserEntity(2L, "Chaos", "cce369436bbb9f0325689a3a6d5d6b9b8a3f39a0", "查尔斯", false);
 
-        userMap.put("gorho", user1);
-        userMap.put("plum", user2);
+        userMap.put("Alen", user1);
+        userMap.put("Chaos", user2);
 
-        roleMap.put("gorho", new HashSet<String>() {
+        roleMap.put("Alen", new HashSet<String>() {
             {
                 add("admin");
-
             }
         });
-
-        roleMap.put("plum", new HashSet<String>() {
+        roleMap.put("Chaos", new HashSet<String>() {
             {
                 add("guest");
             }
         });
-        permMap.put("plum", new HashSet<String>() {
+
+        permMap.put("Chaos", new HashSet<String>() {
             {
                 add("article:read");
             }
@@ -95,10 +98,11 @@ public class ShiroRealm extends AuthorizingRealm {
          *  参数3. 盐值
          *  参数4. 当前 Realm 对象的名称，直接调用父类的 getName() 方法即可
          */
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, user.getPassword(), credentialsSalt,
-                getName());
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, user.getPassword(), credentialsSalt, getName());
         return info;
     }
+
+    //授权shiro会回调的方法
 
     /**
      * 查询数据库，将获取到的用户的角色及权限信息返回
@@ -113,9 +117,11 @@ public class ShiroRealm extends AuthorizingRealm {
         // 查询数据库，获取用户的权限信息
         Set<String> perms = permMap.get(currentUser.getName());
 
+        // 创建 SimpleAuthorizationInfo, 并设置其 角色、权限 属性
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.setRoles(roles);
         info.setStringPermissions(perms);
+        // 返回 SimpleAuthorizationInfo 对象
         return info;
     }
 }

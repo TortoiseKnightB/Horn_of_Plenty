@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
-@Component
 public class MultiRealmAuthenticator extends ModularRealmAuthenticator {
 
     private static final Logger log = LoggerFactory.getLogger(MultiRealmAuthenticator.class);

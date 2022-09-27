@@ -34,8 +34,7 @@ public class JwtRealm extends AuthorizingRealm {
      * 此处的 SimpleAuthenticationInfo 可返回任意值，密码校验时不会用到它
      */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken)
-            throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
         JwtToken jwtToken = (JwtToken) authcToken;
         if (jwtToken.getPrincipal() == null) {
             throw new AccountException("JWT token参数异常！");
@@ -63,7 +62,6 @@ public class JwtRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         // 获取当前用户
         UserEntity currentUser = (UserEntity) SecurityUtils.getSubject().getPrincipal();
-        // UserEntity currentUser = (UserEntity) principals.getPrimaryPrincipal();
         // 查询数据库，获取用户的角色信息
         Set<String> roles = ShiroRealm.roleMap.get(currentUser.getName());
         // 查询数据库，获取用户的权限信息
