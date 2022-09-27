@@ -45,46 +45,39 @@ public class ShiroConfig {
 //    public static LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
 //        return new LifecycleBeanPostProcessor();
 //    }
-//
-//    /**
-//     * 为 Spring-Bean 开启对 Shiro 注解的支持
-//     */
-//    @Bean
-//    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
-//        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
-//        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
-//        return authorizationAttributeSourceAdvisor;
-//    }
-//
-//    @Bean
-//    public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
-//        DefaultAdvisorAutoProxyCreator app = new DefaultAdvisorAutoProxyCreator();
-//        app.setProxyTargetClass(true);
-//        return app;
-//
-//    }
-//
-//    /**
-//     * 不向 Spring容器中注册 JwtFilter Bean，防止 Spring 将 JwtFilter 注册为全局过滤器
-//     * 全局过滤器会对所有请求进行拦截，而本例中只需要拦截除 /login 和 /logout 外的请求
-//     * 另一种简单做法是：直接去掉 jwtFilter()上的 @Bean 注解
-//     */
-//    @Bean
-//    public FilterRegistrationBean<Filter> registration(JwtFilter filter) {
-//        FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<Filter>(filter);
-//        registration.setEnabled(false);
-//        return registration;
-//    }
 
-//    /**
-//     * 禁用session, 不保存用户登录状态。保证每次请求都通过JWT重新认证
-//     */
-//    @Bean
-//    protected SessionStorageEvaluator sessionStorageEvaluator() {
-//        DefaultSessionStorageEvaluator sessionStorageEvaluator = new DefaultSessionStorageEvaluator();
-//        sessionStorageEvaluator.setSessionStorageEnabled(false);
-//        return sessionStorageEvaluator;
-//    }
+
+    /**
+     * 为 Spring-Bean 开启对 Shiro 注解的支持
+     */
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+        return authorizationAttributeSourceAdvisor;
+    }
+
+    @Bean
+    public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
+        DefaultAdvisorAutoProxyCreator app = new DefaultAdvisorAutoProxyCreator();
+        app.setProxyTargetClass(true);
+        return app;
+    }
+
+
+    /**
+     * 取消 JwtFilter 的自动注册
+     * <p>
+     * 不向 Spring 容器中注册 JwtFilter Bean，防止 Spring 将 JwtFilter 注册为全局过滤器，全局过滤器会对所有请求进行拦截（包括登录请求）
+     * <p>
+     * 另一种简单做法是：直接去掉 {@link JwtFilter}上的 @Component 注解
+     */
+    @Bean
+    public FilterRegistrationBean<Filter> registration(JwtFilter filter) {
+        FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>(filter);
+        registration.setEnabled(false);
+        return registration;
+    }
 
     /**
      * 配置访问资源需要的权限
@@ -107,9 +100,10 @@ public class ShiroConfig {
 
         //配置系统受限资源以及公共资源
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
-        filterChainDefinitionMap.put("/login", "anon"); // 可匿名访问
-        filterChainDefinitionMap.put("/logout", "logout"); // 退出登录
-//        filterChainDefinitionMap.put("/**", "jwtFilter,authc"); // 需登录才能访问
+        filterChainDefinitionMap.put("/login", "anon"); // 登录请求，可匿名访问
+        filterChainDefinitionMap.put("/login.html", "anon"); // 登录界面，可匿名访问
+        filterChainDefinitionMap.put("/logout", "logout"); // 退出登录请求
+        filterChainDefinitionMap.put("/**", "jwtFilter"); // 需登录才能访问
 //        filterChainDefinitionMap.put("/**", "authc"); // authc中有调用getSession()方法，session后不能再使用authc，这里使用自定义的拦截器
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
@@ -133,7 +127,7 @@ public class ShiroConfig {
         realms.add(shiroRealm());
         securityManager.setRealms(realms); // 配置多个realm
 
-        // 3.关闭shiro自带的session
+        // 3.关闭shiro自带的session, 不保存用户登录状态。保证每次请求都通过JWT重新认证
         DefaultWebSubjectFactory statelessDefaultSubjectFactory = new StatelessDefaultSubjectFactory();
         securityManager.setSubjectFactory(statelessDefaultSubjectFactory);
         DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();

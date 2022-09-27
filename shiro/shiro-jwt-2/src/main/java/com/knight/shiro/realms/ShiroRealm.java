@@ -37,7 +37,7 @@ public class ShiroRealm extends AuthorizingRealm {
         // 密码为123456
         UserEntity user1 = new UserEntity(1L, "Alen", "f1f9f1d73234cffbb92b80494fbdaac01a525bd7", "艾伦", false);
         // 密码为123456
-        UserEntity user2 = new UserEntity(2L, "Chaos", "cce369436bbb9f0325689a3a6d5d6b9b8a3f39a0", "查尔斯", false);
+        UserEntity user2 = new UserEntity(2L, "Chaos", "c3f7e8754faba8e91e4beb9fac85df6c23fd2124", "查尔斯", false);
 
         userMap.put("Alen", user1);
         userMap.put("Chaos", user2);

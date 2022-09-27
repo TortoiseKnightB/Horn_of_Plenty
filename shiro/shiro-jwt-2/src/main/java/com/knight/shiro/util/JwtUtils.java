@@ -25,8 +25,9 @@ import java.util.Map;
 @Component
 public class JwtUtils {
 
+    // TODO: 设置时间
     // 过期时间5分钟
-    private static final long EXPIRE_TIME = 5*60*1000;
+    private static final long EXPIRE_TIME = 500*60*1000;
 
     //自己定制密钥
     public static final String SECRET = "SECRET_VALUE";

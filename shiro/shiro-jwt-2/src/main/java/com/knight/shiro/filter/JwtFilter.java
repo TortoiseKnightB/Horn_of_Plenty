@@ -20,6 +20,8 @@ import java.io.PrintWriter;
 
 /**
  * 自定义的认证过滤器，用来拦截Header中携带token的请求
+ * <p>
+ * 注解@Component将此Filter加入Spring容器，会全局调用，拦截所有URL。需要取消自动注册（见{@link com.knight.shiro.config.ShiroConfig#registration(JwtFilter) ShiroConfig.registration()}）
  */
 @Component
 public class JwtFilter extends BasicHttpAuthenticationFilter {
@@ -204,8 +206,8 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         httpServletResponse.setContentType("application/json;charset=UTF-8");
         httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
 
-//        PrintWriter writer = httpServletResponse.getWriter();
-//        writer.write("{\"errorCode\":401,\"msg\":\"UNAUTHORIZED\"}");
+        PrintWriter writer = httpServletResponse.getWriter();
+        writer.write("{\"errorCode\":401,\"msg\":\"UNAUTHORIZED\"}");
         fillCorsHeader(WebUtils.toHttp(request), httpServletResponse);
         return false;
     }
