@@ -5,6 +5,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.subject.support.DisabledSessionException;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,8 +30,15 @@ public class ArticleController {
     @GetMapping("/testSession")
     public String testSession() {
         Subject subject = SecurityUtils.getSubject();
-        Session session = subject.getSession();
-        session.setAttribute("MyName", "MySession--Ben");
-        return session.getAttribute("MyName").toString() + "::" + subject.getPrincipal().toString();
+        try {
+            // 禁用session后无法调用getSession()
+            Session session = subject.getSession();
+        } catch (DisabledSessionException e) {
+            return e.toString();
+        }
+//        session.setAttribute("MyName", "MySession--Ben");
+        return subject.getPrincipal() == null ? "null" : subject.getPrincipal().toString();
     }
 }
+
+

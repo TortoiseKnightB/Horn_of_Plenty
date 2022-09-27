@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.Filter;
 
+import com.knight.shiro.factory.StatelessDefaultSubjectFactory;
 import com.knight.shiro.filter.JwtFilter;
 import com.knight.shiro.realms.JwtRealm;
 import com.knight.shiro.realms.MultiRealmAuthenticator;
@@ -109,7 +110,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/login", "anon"); // 可匿名访问
         filterChainDefinitionMap.put("/logout", "logout"); // 退出登录
 //        filterChainDefinitionMap.put("/**", "jwtFilter,authc"); // 需登录才能访问
-        filterChainDefinitionMap.put("/**", "authc"); // 需登录才能访问
+//        filterChainDefinitionMap.put("/**", "authc"); // authc中有调用getSession()方法，session后不能再使用authc，这里使用自定义的拦截器
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
         return shiroFilterFactoryBean;
@@ -132,10 +133,9 @@ public class ShiroConfig {
         realms.add(shiroRealm());
         securityManager.setRealms(realms); // 配置多个realm
 
-        // TODO: 这个待深入研究
         // 3.关闭shiro自带的session
-//        DefaultWebSubjectFactory statelessDefaultSubjectFactory = new StatelessDefaultSubjectFactory();
-//        securityManager.setSubjectFactory(statelessDefaultSubjectFactory);
+        DefaultWebSubjectFactory statelessDefaultSubjectFactory = new StatelessDefaultSubjectFactory();
+        securityManager.setSubjectFactory(statelessDefaultSubjectFactory);
         DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
         DefaultSessionStorageEvaluator sessionStorageEvaluator = new DefaultSessionStorageEvaluator();
         sessionStorageEvaluator.setSessionStorageEnabled(false);
