@@ -18,6 +18,14 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 public class LoginController {
 
+    /**
+     * 登录
+     *
+     * @param userName
+     * @param password
+     * @param response
+     * @return
+     */
     @PostMapping(value = "/login")
     public String userLogin(@RequestParam(name = "username", required = true) String userName,
                             @RequestParam(name = "password", required = true) String password, ServletResponse response) {
@@ -52,6 +60,11 @@ public class LoginController {
         return msg;
     }
 
+    /**
+     * 登出，给前端返回登出信息
+     *
+     * @return
+     */
     @GetMapping("/logout")
     public Object logout() {
         return "logout";

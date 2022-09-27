@@ -6,13 +6,15 @@ import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.support.DisabledSessionException;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 角色、权限测试类
+ */
 @RestController
-@RequestMapping("/article")
+@RequestMapping("/shiro/article")
 public class ArticleController {
 
     @GetMapping("/delete")

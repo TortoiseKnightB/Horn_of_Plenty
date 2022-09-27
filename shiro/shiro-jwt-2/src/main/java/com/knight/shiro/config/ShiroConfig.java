@@ -18,12 +18,9 @@ import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authc.pam.AuthenticationStrategy;
 import org.apache.shiro.authc.pam.FirstSuccessfulStrategy;
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
-import org.apache.shiro.authz.Authorizer;
-import org.apache.shiro.authz.ModularRealmAuthorizer;
 import org.apache.shiro.mgt.*;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
-import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -35,17 +32,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
-// TODO: 删掉多余配置
 @Configuration
 public class ShiroConfig {
-//    /**
-//     * 交由 Spring 来自动地管理 Shiro-Bean 的生命周期
-//     */
-//    @Bean
-//    public static LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
-//        return new LifecycleBeanPostProcessor();
-//    }
 
+
+    //region 默认配置，直接用就行了
+
+    /**
+     * 交由 Spring 来自动地管理 Shiro-Bean 的生命周期
+     */
+    @Bean
+    public static LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
+    }
 
     /**
      * 为 Spring-Bean 开启对 Shiro 注解的支持
@@ -63,7 +62,7 @@ public class ShiroConfig {
         app.setProxyTargetClass(true);
         return app;
     }
-
+    //endregion
 
     /**
      * 取消 JwtFilter 的自动注册
@@ -103,8 +102,10 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/login", "anon"); // 登录请求，可匿名访问
         filterChainDefinitionMap.put("/login.html", "anon"); // 登录界面，可匿名访问
         filterChainDefinitionMap.put("/logout", "logout"); // 退出登录请求
-        filterChainDefinitionMap.put("/**", "jwtFilter"); // 需登录才能访问
+        filterChainDefinitionMap.put("/shiro/**", "jwtFilter"); // 需登录才能访问
 //        filterChainDefinitionMap.put("/**", "authc"); // authc中有调用getSession()方法，session后不能再使用authc，这里使用自定义的拦截器
+        filterChainDefinitionMap.put("/**", "anon"); // 默认支持访问
+
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
         return shiroFilterFactoryBean;
@@ -177,10 +178,4 @@ public class ShiroConfig {
         return shiroRealm;
     }
 
-//    // TODO: ？
-//    @Bean
-//    public Authorizer authorizer() {
-//        //这里是个坑，如果没有这个bean，启动会报错，所以得加上
-//        return new ModularRealmAuthorizer();
-//    }
 }

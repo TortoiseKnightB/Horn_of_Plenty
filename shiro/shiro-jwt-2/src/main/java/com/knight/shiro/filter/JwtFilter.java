@@ -82,6 +82,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         }
 
         // TODO: 登录过程放在这，不放在 onAccessDenied() 方法？
+        // 不为登录请求，进行token验证
         boolean allowed = false;
         try {
             // 检测header里的JWT Token内容是否正确，尝试使用token进行登录
@@ -206,6 +207,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         httpServletResponse.setContentType("application/json;charset=UTF-8");
         httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
 
+        // TODO: 这里给前端返回信息，要求进行登录
         PrintWriter writer = httpServletResponse.getWriter();
         writer.write("{\"errorCode\":401,\"msg\":\"UNAUTHORIZED\"}");
         fillCorsHeader(WebUtils.toHttp(request), httpServletResponse);
@@ -216,8 +218,12 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     protected void fillCorsHeader(HttpServletRequest request, HttpServletResponse response) {
         response.setHeader("Access-control-Allow-Origin", request.getHeader("Origin"));
         response.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,HEAD");
-        // TODO: request.getHeader("Access-Control-Request-Headers") 可能返回 "null"
-        response.setHeader("Access-Control-Allow-Headers", request.getHeader("Access-Control-Request-Headers") + "," + JwtUtils.AUTH_HEADER);
+
+        if (request.getHeader("Access-Control-Request-Headers") == null) {
+            response.setHeader("Access-Control-Allow-Headers", JwtUtils.AUTH_HEADER);
+        } else {
+            response.setHeader("Access-Control-Allow-Headers", request.getHeader("Access-Control-Request-Headers") + "," + JwtUtils.AUTH_HEADER);
+        }
     }
 }
 

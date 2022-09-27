@@ -31,6 +31,7 @@ public class MultiRealmAuthenticator extends ModularRealmAuthenticator {
 
             aggregate = strategy.beforeAttempt(realm, token, aggregate);
 
+            // 我们使用自己封装的JwtToken，因此ShiroRealm不会执行下方的验证
             if (realm.supports(token)) {
 
                 log.trace("Attempting to authenticate token [{}] using realm [{}]", token, realm);

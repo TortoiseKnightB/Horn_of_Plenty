@@ -35,6 +35,9 @@ public class JwtRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
+
+        System.out.println("JwtRealm doGetAuthenticationInfo");
+
         JwtToken jwtToken = (JwtToken) authcToken;
         if (jwtToken.getPrincipal() == null) {
             throw new AccountException("JWT token参数异常！");
@@ -60,6 +63,9 @@ public class JwtRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+
+        System.out.println("JwtRealm doGetAuthorizationInfo");
+
         // 获取当前用户
         UserEntity currentUser = (UserEntity) SecurityUtils.getSubject().getPrincipal();
         // 查询数据库，获取用户的角色信息

@@ -73,6 +73,9 @@ public class ShiroRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+
+        System.out.println("ShiroRealm doGetAuthenticationInfo");
+
         // 从 AuthenticationToken 中获取当前用户
         String username = (String) token.getPrincipal();
         // 查询数据库获取用户信息，此处使用 Map 来模拟数据库
@@ -109,6 +112,9 @@ public class ShiroRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+
+        System.out.println("ShiroRealm doGetAuthorizationInfo");
+
         // 获取当前用户
         UserEntity currentUser = (UserEntity) SecurityUtils.getSubject().getPrincipal();
         // UserEntity currentUser = (UserEntity)principals.getPrimaryPrincipal();
