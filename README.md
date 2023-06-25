@@ -7,7 +7,8 @@
   - nacos：docker    微服务配置中心、注册中心，部署在 txcloud
   - sentinel：docker    流控、降级、熔断、监控等，由于服务器无法访问本地内部网络，暂时搁置（本地部署已经成功）
   - seata：/root/local    分布式事务控制中心，远程部署出现问题，怀疑原因同上 sentinel（本地部署已经成功）
-  - jdk：/root/local    jdk1.8，主要用来运行一些服务，部署在 txcloud
+  - jdk：/root/local    jdk1.8，主要用来运行一些服务，部署在 txcloud、alicloud
   - elasticsearch：docker    日志存储记录查询中心，部署在 txcloud
   - kibana：docker    日志查询结果展示组件，部署在 txcloud
   - logstash    暂未部署在远程服务器，只在本地进行了配置。负责将本地输出日志 传给 elasticsearch
+  - apollo    服务部署在txcloud，数据库部署在alicloud
