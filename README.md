@@ -12,3 +12,4 @@
   - kibana：docker    日志查询结果展示组件，部署在 txcloud
   - logstash    暂未部署在远程服务器，只在本地进行了配置。负责将本地输出日志 传给 elasticsearch
   - apollo    服务部署在txcloud，数据库部署在alicloud
+  - xxl-job    服务部署在txcloud，数据库部署在alicloud。目前无法连接本地内网
