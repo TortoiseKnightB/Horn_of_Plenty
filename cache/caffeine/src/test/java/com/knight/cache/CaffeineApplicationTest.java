@@ -297,6 +297,7 @@ class CaffeineApplicationTest {
         cache.put(1, getInDB());
         System.out.println("start index = " + index);
 
+        // 写后刷新其实并不是方法名描述的那样在一定时间后自动刷新，而是在一定时间后进行了访问，再访问后才自动刷新
         // 休眠2.5秒，后取值。因为超过2秒，触发刷新，但本次的取值仍为旧值
         Thread.sleep(2500);
         System.out.println(cache.getIfPresent(1));
